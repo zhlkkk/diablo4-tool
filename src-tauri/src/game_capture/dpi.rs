@@ -14,19 +14,24 @@ use crate::types::Resolution;
 /// Get client area dimensions of the game window.
 #[cfg(windows)]
 pub fn get_game_resolution(hwnd: HWND) -> Result<(u32, u32), CaptureError> {
-    todo!()
+    let mut rect = RECT::default();
+    unsafe {
+        GetClientRect(hwnd, &mut rect)
+            .map_err(|e| CaptureError::GetRectFailed(e.to_string()))?;
+    }
+    Ok(((rect.right - rect.left) as u32, (rect.bottom - rect.top) as u32))
 }
 
 /// Get the DPI scale factor for the game window.
 #[cfg(windows)]
 pub fn get_game_dpi(hwnd: HWND) -> u32 {
-    todo!()
+    unsafe { GetDpiForWindow(hwnd) }
 }
 
 /// Normalize a logical coordinate to physical pixels for the game window's DPI.
 /// Formula: physical_px = logical_px * dpi / 96
 pub fn normalize_coord(logical: u32, game_dpi: u32) -> u32 {
-    todo!()
+    (logical as f64 * game_dpi as f64 / 96.0).round() as u32
 }
 
 #[cfg(test)]
