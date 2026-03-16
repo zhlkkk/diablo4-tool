@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Research Spike
 
-- [ ] **SPIKE-01**: Developer can confirm whether d2core.com API includes skill allocation data by inspecting live network traffic
-- [ ] **SPIKE-02**: Developer has documented the exact d2core API endpoint, request format, and response JSON schema for builds
+- [x] **SPIKE-01**: Developer can confirm whether d2core.com API includes skill allocation data by inspecting live network traffic — COMPLETE 2026-03-16 (verdict: NO API exists; bd= client-side decoded)
+- [x] **SPIKE-02**: Developer has documented the exact d2core API endpoint, request format, and response JSON schema for builds — COMPLETE 2026-03-16 (no API; DOM selectors and bd= encoding documented in SPIKE-FINDINGS.md)
 
 ### Web Parser
 
@@ -94,8 +94,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPIKE-01 | Phase 1 — Research Spike | Pending |
-| SPIKE-02 | Phase 1 — Research Spike | Pending |
+| SPIKE-01 | Phase 1 — Research Spike | Complete (2026-03-16) |
+| SPIKE-02 | Phase 1 — Research Spike | Complete (2026-03-16) |
 | SAFE-01 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | SAFE-02 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | SAFE-03 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
@@ -136,4 +136,4 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 after roadmap creation*
+*Last updated: 2026-03-16 after Phase 1 Plan 01 completion (SPIKE-01, SPIKE-02 complete)*

@@ -12,7 +12,7 @@ Five phases deliver the complete apply-a-build-from-a-link flow. Phase 1 resolve
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Research Spike** - Empirically verify d2core.com API skills data availability before any parser code is written
+- [x] **Phase 1: Research Spike** - Empirically verify d2core.com API skills data availability before any parser code is written — COMPLETE 2026-03-16
 - [ ] **Phase 2: Scaffold + Safety + Game Capture** - Project skeleton, corrected safety invariant, and game window capture module
 - [ ] **Phase 3: Web Parser** - d2core link parsing and BuildPlan extraction, informed by Phase 1 findings
 - [ ] **Phase 4: Auto Applier** - Resolution-adaptive skill and paragon click automation with humanization and safety re-checks
@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Investigate d2core API (human DevTools capture + author SPIKE-FINDINGS.md)
+- [x] 01-01-PLAN.md — Investigate d2core API (human DevTools capture + author SPIKE-FINDINGS.md) — COMPLETE 2026-03-16 | dom-fallback architecture confirmed
 
 ### Phase 2: Scaffold + Safety + Game Capture
 **Goal**: Working Tauri project skeleton with DPI-aware manifest, typed AppState/BuildPlan/GameState structs, safety module that gates on game-UI-state (not network), and game window capture module
@@ -87,7 +87,7 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Research Spike | 0/? | Not started | - |
+| 1. Research Spike | 1/1 | Complete | 2026-03-16 |
 | 2. Scaffold + Safety + Game Capture | 0/? | Not started | - |
 | 3. Web Parser | 0/? | Not started | - |
 | 4. Auto Applier | 0/? | Not started | - |
