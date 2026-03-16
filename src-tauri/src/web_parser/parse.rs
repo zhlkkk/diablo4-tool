@@ -33,6 +33,14 @@ pub fn parse_build_response(resp: Value, build_id: &str) -> Result<BuildPlan, Pa
     })?;
 
     // Step 3: Extract inner data object
+    // If the API returns an errMsg (e.g. "数据不存在"), the build was not found
+    if let Some(err_msg) = inner.get("errMsg").and_then(|e| e.as_str()) {
+        return Err(ParserError::BuildNotFound(format!(
+            "{}: {}",
+            build_id, err_msg
+        )));
+    }
+
     let data = inner.get("data").ok_or_else(|| {
         ParserError::ParseError(format!(
             "missing 'data' field in parsed response for build {}",
