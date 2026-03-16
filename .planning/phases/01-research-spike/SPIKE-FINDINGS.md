@@ -142,17 +142,24 @@ skill-node: data-skill-id="Falling Star", data-rank="1", data-upgrades="Enhanced
 Rendered text: "Paladin Falling Star" (class label + skill name)
 ```
 
-### Vector 2: bd=2p6t
+### Vector 2: bd=1qHh
 
-- Build title: Unknown (page may have 404'd or was incomplete)
-- Class: Unknown
-- Variants count: unknown
+- Build title: Druid build (from visible DOM text)
+- Class: Druid
+- Variants count: unknown (DOM inspection only; structure not fully enumerated)
 - Investigation date: 2026-03-16
 
-Page behavior: Possibly invalid/expired bd= value — page showed 404-like behavior or
-incomplete render. DOM structure was the same pattern as Vector 1 when content was present.
+Page loaded successfully. Skills rendered in DOM.
 
 Raw response: NOT APPLICABLE — client-side SPA, no API JSON response.
+
+DOM observation:
+```
+skill-node elements present with data-skill-id, data-rank attributes
+window.__NEXT_DATA__: not found (confirmed via console inspection)
+```
+
+Note: Replaces original bd=2p6t which showed 404-like behavior (expired/invalid build ID).
 
 ---
 
