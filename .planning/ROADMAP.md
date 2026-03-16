@@ -28,7 +28,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Developer has confirmed YES or NO for skills data presence in the d2core API response via live browser devtools inspection
   2. The exact API endpoint URL, required request headers, and response JSON schema are written down in a spike document
   3. The parser architecture decision (direct HTTP vs. DOM fallback) is recorded based on the findings
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 01-01-PLAN.md — Investigate d2core API (human DevTools capture + author SPIKE-FINDINGS.md)
 
 ### Phase 2: Scaffold + Safety + Game Capture
 **Goal**: Working Tauri project skeleton with DPI-aware manifest, typed AppState/BuildPlan/GameState structs, safety module that gates on game-UI-state (not network), and game window capture module
