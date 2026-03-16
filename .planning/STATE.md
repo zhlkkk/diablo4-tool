@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: "Phase 05 Plan 01 complete (backend Rust commands for GUI integration)"
-last_updated: "2026-03-16T14:00:00.000Z"
-last_activity: "2026-03-16 — Phase 5 Plan 01 complete (CalibrationData, calibration I/O, screenshot, variant_index)"
+stopped_at: "Phase 05 Plan 02 complete (frontend GUI controls, variant selector, progress bar)"
+last_updated: "2026-03-16T13:41:30Z"
+last_activity: "2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors, skill lookup)"
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 13
-  completed_plans: 11
-  percent: 85
+  completed_plans: 12
+  percent: 92
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-16)
 ## Current Position
 
 Phase: 5 of 5 (GUI Integration) — IN PROGRESS
-Plan: 1 of 3 complete
-Status: Phase 5 underway — backend commands complete, frontend plans remaining
-Last activity: 2026-03-16 — Phase 5 Plan 01 complete (CalibrationData, calibration I/O, screenshot capture, variant_index)
+Plan: 2 of 3 complete
+Status: Phase 5 underway — backend commands and frontend GUI complete, calibration tool remaining
+Last activity: 2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors)
 
-Progress: [████████░░] 85%
+Progress: [█████████░] 92%
 
 ## Performance Metrics
 
@@ -94,6 +94,9 @@ Recent decisions affecting current work:
 - [05-01]: CalibrationPoint is a separate serde-compatible type from auto_applier::coords::Point2D (Copy-only, not Serialize)
 - [05-01]: resume() passes variant_index=0 for v1 simplicity — user cannot change variant mid-apply
 - [05-01]: BGRA-to-RGBA channel swap inline before image encoding (BitBlt returns BGRA on Windows)
+- [05-02]: handleStop uses pause_apply then resets to Idle — no dedicated stop_apply command; pause sets cancel flag which halts automation
+- [05-02]: Calibration modal is a placeholder — showCalibration state reserved; full wizard deferred to Plan 03
+- [05-02]: Variant selector placed above build-card so changing variant updates both preview and the variantIndex passed to start_apply
 
 ### Pending Todos
 
@@ -106,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T14:00:00.000Z
-Stopped at: Phase 05 Plan 01 complete (backend Rust commands for GUI integration)
-Resume file: .planning/phases/05-gui-integration/05-02-PLAN.md
+Last session: 2026-03-16T13:41:30Z
+Stopped at: Phase 05 Plan 02 complete (frontend GUI controls, variant selector, progress bar)
+Resume file: .planning/phases/05-gui-integration/05-03-PLAN.md

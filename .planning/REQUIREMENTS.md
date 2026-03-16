@@ -52,11 +52,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### GUI
 
-- [ ] **GUI-01**: User sees a clean interface to paste d2core build link
-- [ ] **GUI-02**: User sees parsed build preview (skills + paragon) before applying
+- [x] **GUI-01**: User sees a clean interface to paste d2core build link
+- [x] **GUI-02**: User sees parsed build preview (skills + paragon) before applying
 - [x] **GUI-03**: User has start/stop/pause controls for the apply process — backend commands complete 2026-03-16 (05-01)
-- [ ] **GUI-04**: User sees real-time status and progress during automation
-- [ ] **GUI-05**: User sees clear error messages for all failure states (game not found, bad link, unsafe state)
+- [x] **GUI-04**: User sees real-time status and progress during automation
+- [x] **GUI-05**: User sees clear error messages for all failure states (game not found, bad link, unsafe state)
 - [x] **GUI-06**: App window stays responsive during long-running automation operations — async executor confirmed 2026-03-16 (05-01)
 
 ## v2 Requirements
@@ -122,11 +122,11 @@ Requirements for initial release. Each maps to roadmap phases.
 | APPLY-05 | Phase 4 — Auto Applier | Complete |
 | APPLY-06 | Phase 4 — Auto Applier | Complete |
 | APPLY-07 | Phase 4 — Auto Applier | Complete |
-| GUI-01 | Phase 5 — GUI + Integration | Pending |
-| GUI-02 | Phase 5 — GUI + Integration | Pending |
+| GUI-01 | Phase 5 — GUI + Integration | Complete |
+| GUI-02 | Phase 5 — GUI + Integration | Complete |
 | GUI-03 | Phase 5 — GUI + Integration | Complete — 05-01 (backend commands) |
-| GUI-04 | Phase 5 — GUI + Integration | Pending |
-| GUI-05 | Phase 5 — GUI + Integration | Pending |
+| GUI-04 | Phase 5 — GUI + Integration | Complete |
+| GUI-05 | Phase 5 — GUI + Integration | Complete |
 | GUI-06 | Phase 5 — GUI + Integration | Complete — 05-01 (async executor confirmed) |
 
 **Coverage:**

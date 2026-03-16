@@ -111,4 +111,4 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
 | 3. Web Parser | 3/3 | Complete   | 2026-03-16 |
 | 4. Auto Applier | 2/2 | Complete   | 2026-03-16 |
-| 5. GUI + Integration | 1/3 | In Progress | - |
+| 5. GUI + Integration | 2/3 | In Progress|  |
