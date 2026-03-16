@@ -94,46 +94,46 @@ Requirements for initial release. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPIKE-01 | Phase 1 | Pending |
-| SPIKE-02 | Phase 1 | Pending |
-| PARSE-01 | Phase 2 | Pending |
-| PARSE-02 | Phase 2 | Pending |
-| PARSE-03 | Phase 2 | Pending |
-| PARSE-04 | Phase 2 | Pending |
-| PARSE-05 | Phase 2 | Pending |
-| PARSE-06 | Phase 2 | Pending |
-| PARSE-07 | Phase 2 | Pending |
-| SAFE-01 | Phase 3 | Pending |
-| SAFE-02 | Phase 3 | Pending |
-| SAFE-03 | Phase 3 | Pending |
-| SAFE-04 | Phase 3 | Pending |
-| SAFE-05 | Phase 3 | Pending |
-| SAFE-06 | Phase 3 | Pending |
-| CAPT-01 | Phase 3 | Pending |
-| CAPT-02 | Phase 3 | Pending |
-| CAPT-03 | Phase 3 | Pending |
-| CAPT-04 | Phase 3 | Pending |
-| CAPT-05 | Phase 3 | Pending |
-| CAPT-06 | Phase 3 | Pending |
-| APPLY-01 | Phase 4 | Pending |
-| APPLY-02 | Phase 4 | Pending |
-| APPLY-03 | Phase 4 | Pending |
-| APPLY-04 | Phase 4 | Pending |
-| APPLY-05 | Phase 4 | Pending |
-| APPLY-06 | Phase 4 | Pending |
-| APPLY-07 | Phase 4 | Pending |
-| GUI-01 | Phase 5 | Pending |
-| GUI-02 | Phase 5 | Pending |
-| GUI-03 | Phase 5 | Pending |
-| GUI-04 | Phase 5 | Pending |
-| GUI-05 | Phase 5 | Pending |
-| GUI-06 | Phase 5 | Pending |
+| SPIKE-01 | Phase 1 — Research Spike | Pending |
+| SPIKE-02 | Phase 1 — Research Spike | Pending |
+| SAFE-01 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-02 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-03 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-04 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-05 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-06 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-01 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-02 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-03 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-04 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-05 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-06 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| PARSE-01 | Phase 3 — Web Parser | Pending |
+| PARSE-02 | Phase 3 — Web Parser | Pending |
+| PARSE-03 | Phase 3 — Web Parser | Pending |
+| PARSE-04 | Phase 3 — Web Parser | Pending |
+| PARSE-05 | Phase 3 — Web Parser | Pending |
+| PARSE-06 | Phase 3 — Web Parser | Pending |
+| PARSE-07 | Phase 3 — Web Parser | Pending |
+| APPLY-01 | Phase 4 — Auto Applier | Pending |
+| APPLY-02 | Phase 4 — Auto Applier | Pending |
+| APPLY-03 | Phase 4 — Auto Applier | Pending |
+| APPLY-04 | Phase 4 — Auto Applier | Pending |
+| APPLY-05 | Phase 4 — Auto Applier | Pending |
+| APPLY-06 | Phase 4 — Auto Applier | Pending |
+| APPLY-07 | Phase 4 — Auto Applier | Pending |
+| GUI-01 | Phase 5 — GUI + Integration | Pending |
+| GUI-02 | Phase 5 — GUI + Integration | Pending |
+| GUI-03 | Phase 5 — GUI + Integration | Pending |
+| GUI-04 | Phase 5 — GUI + Integration | Pending |
+| GUI-05 | Phase 5 — GUI + Integration | Pending |
+| GUI-06 | Phase 5 — GUI + Integration | Pending |
 
 **Coverage:**
-- v1 requirements: 33 total
-- Mapped to phases: 33
+- v1 requirements: 34 total
+- Mapped to phases: 34
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 after initial definition*
+*Last updated: 2026-03-16 after roadmap creation*
