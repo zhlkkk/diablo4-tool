@@ -78,6 +78,9 @@ Recent decisions affecting current work:
 - [03-01]: request_data is double-serialized (JSON string inside JSON) — required by TCB SDK wire format
 - [03-01]: ParserError messages are Chinese-only (target users) — technical detail via debug format
 - [03-01]: No cfg(windows) guards on web_parser — pure HTTP, works cross-platform
+- [03-02]: parse_build_response exported via pub use in web_parser/mod.rs — required for integration test access
+- [03-02]: skillOrder is null in live API responses — Vec<u32> is valid empty; test checks type not length
+- [03-02]: errMsg response from API maps to BuildNotFound (not ParseError) — fixed in parse.rs
 - [03-03]: vite-env.d.ts required for CSS imports under noUncheckedSideEffectImports (TypeScript 5.6+) — standard Vite file missing from scaffold
 - [03-03]: React state split into error (API errors) and validation (client-side) for different error sources
 - [03-03]: Skill names displayed as raw API keys in preview — name mapping deferred to Phase 5
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T12:24:00Z
-Stopped at: Completed 03-03-PLAN.md
+Last session: 2026-03-16T12:21:15Z
+Stopped at: Completed 03-02-PLAN.md (fixtures + tests)
 Resume file: .planning/phases/04-auto-applier/04-01-PLAN.md
