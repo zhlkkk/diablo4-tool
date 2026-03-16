@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is in a safe UI state.
-**Current focus:** Phase 3 complete — web_parser module, pinned test fixtures, and React frontend UI all done. Ready for Phase 4 (auto-applier).
+**Current focus:** Phase 4 (auto-applier) — resolution-adaptive click automation with humanization
 
 ## Current Position
 
-Phase: 3 of 5 (Web Parser)
-Plan: 3 of 3 in current phase (all done)
-Status: Phase 3 complete — all 3 plans finished
-Last activity: 2026-03-16 — Phase 3 Plan 03 (React frontend UI) complete
+Phase: 4 of 5 (Auto Applier)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-03-16 — Phase 3 complete, transitioning to Phase 4
 
-Progress: [████████░░] 75%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
@@ -96,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T12:21:15Z
-Stopped at: Completed 03-02-PLAN.md (fixtures + tests)
-Resume file: .planning/phases/04-auto-applier/04-01-PLAN.md
+Last session: 2026-03-16
+Stopped at: Phase 3 complete, ready to plan Phase 4
+Resume file: None

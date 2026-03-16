@@ -6,24 +6,24 @@ A Windows desktop tool that takes a d2core.com/d4/planner build link, reverse-en
 
 ## Core Value
 
-Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is offline.
+Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is in a safe UI state.
 
 ## Requirements
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ User can paste a d2core.com/d4/planner?bd=XXXX link and see the decoded build (skills + paragon) — Phase 3
+- ✓ App reverse-engineers the bd= parameter to extract skill allocations and paragon board choices — Phase 3
+- ✓ App captures the Diablo IV game window and detects current resolution — Phase 2
+- ✓ Safety module disables auto-apply mode if the game is detected as online — Phase 2
+- ✓ Unit tests exist for web_parser and game_capture modules — Phase 2, 3
 
 ### Active
 
-- [ ] User can paste a d2core.com/d4/planner?bd=XXXX link and see the decoded build (skills + paragon)
-- [ ] App reverse-engineers the bd= parameter to extract skill allocations and paragon board choices
-- [ ] App captures the Diablo IV game window and detects current resolution
 - [ ] App applies skills to character via resolution-adaptive UI click automation
 - [ ] App applies paragon board choices via resolution-adaptive UI click automation
-- [ ] Safety module disables auto-apply mode if the game is detected as online
 - [ ] Resolution-adaptive click mapping adjusts to any supported game resolution
-- [ ] Unit tests exist for each module (web_parser, game_capture, auto_applier, gui)
+- [ ] Unit tests exist for auto_applier and gui modules
 - [ ] GUI displays parsed build preview before applying
 - [ ] GUI provides start/stop controls for the apply process
 
@@ -60,6 +60,9 @@ Automatically apply a planned build to a Diablo IV character from a single paste
 | UI automation over memory injection | Anti-cheat safety, ToS compliance | — Pending |
 | Offline-only enforcement | Protect users from account bans | — Pending |
 | 4-module architecture (web_parser, game_capture, auto_applier, gui) | Clear separation of concerns, testable units | — Pending |
+| Direct TCB API over DOM scraping | d2core.com JS bundle reveals Tencent CloudBase endpoint; no headless browser needed | Validated Phase 3 |
+| Double-serialized request_data format | TCB SDK wire format requires JSON string inside JSON body | Validated Phase 3 |
+| Chinese-only error messages | Target user base is Chinese; technical detail in debug format | Validated Phase 3 |
 
 ---
-*Last updated: 2026-03-16 after initialization*
+*Last updated: 2026-03-16 after Phase 3*

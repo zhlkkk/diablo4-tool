@@ -64,8 +64,8 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — web_parser Rust module: D2CoreClient, extract/parse functions, error types, Tauri command — COMPLETE 2026-03-16
-- [ ] 03-02-PLAN.md — Pinned test fixtures and unit tests for web_parser
-- [ ] 03-03-PLAN.md — Frontend React UI: link input, build preview card, dark theme
+- [x] 03-02-PLAN.md — Pinned test fixtures and unit tests for web_parser — COMPLETE 2026-03-16
+- [x] 03-03-PLAN.md — Frontend React UI: link input, build preview card, dark theme — COMPLETE 2026-03-16
 
 ### Phase 4: Auto Applier
 **Goal**: `auto_applier::executor::run()` applies a full BuildPlan to the character via resolution-adaptive, humanized click sequences with per-step safety re-checks, progress events, and cancel support
