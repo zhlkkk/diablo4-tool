@@ -33,6 +33,18 @@ impl SkillTreeCoords {
     pub const SKILL_GRID_SPACING: u32 = 80;
 }
 
+/// Scale a coordinate captured at calibration resolution to the target game resolution.
+/// calibration_width is the resolution_width from CalibrationData.
+/// target_res is the current game Resolution.
+pub fn scale_from_calibration(x: u32, y: u32, calibration_width: u32, target_res: &Resolution) -> (u32, u32) {
+    // First normalize to 1080p (calibration may have been done at any resolution)
+    let calib_to_1080p = 1920.0 / calibration_width as f64;
+    let x_1080p = (x as f64 * calib_to_1080p).round() as u32;
+    let y_1080p = (y as f64 * calib_to_1080p).round() as u32;
+    // Then scale from 1080p to target
+    scale_coord(x_1080p, y_1080p, target_res)
+}
+
 /// Paragon board UI coordinate constants (1080p reference, requires empirical measurement).
 pub struct ParagonBoardCoords;
 

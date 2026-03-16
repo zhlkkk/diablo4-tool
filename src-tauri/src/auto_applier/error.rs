@@ -18,4 +18,6 @@ pub enum ApplyError {
     TaskPanic(String),
     #[error("Automation cancelled")]
     Cancelled,
+    #[error("No calibration data found — please calibrate coordinates first")]
+    NoCalibration,
 }

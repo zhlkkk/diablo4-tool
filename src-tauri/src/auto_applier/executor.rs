@@ -1,6 +1,5 @@
-use crate::auto_applier::coords::{ParagonBoardCoords, SkillTreeCoords};
 use crate::auto_applier::error::ApplyError;
-use crate::types::{ApplyPhase, BuildPlan, Resolution, Variant};
+use crate::types::{ApplyPhase, BuildPlan, CalibrationData, Resolution, Variant};
 use std::sync::atomic::Ordering;
 use std::sync::Mutex;
 use tauri::Emitter;
@@ -13,11 +12,30 @@ pub struct ClickStep {
     pub label: String, // Human-readable description for progress events
 }
 
+/// Load CalibrationData from appDataDir/calibration.json.
+/// Returns ApplyError::NoCalibration if file does not exist.
+fn load_calibration_from_disk(app: &tauri::AppHandle) -> Result<CalibrationData, ApplyError> {
+    use tauri::Manager;
+    let dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+    let path = dir.join("calibration.json");
+    if !path.exists() {
+        return Err(ApplyError::NoCalibration);
+    }
+    let contents =
+        std::fs::read_to_string(&path).map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+    let data: CalibrationData =
+        serde_json::from_str(&contents).map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+    Ok(data)
+}
+
 /// Build an ordered sequence of ClickSteps from a Variant at 1080p reference coordinates.
 /// Order: skills (per skill_order or skill.keys()), then equip_skills, then paragon boards.
 ///
 /// Coordinates are 1080p reference values; scale_coord() is applied later in run().
-pub fn build_step_sequence(variant: &Variant, _res: &Resolution) -> Vec<ClickStep> {
+pub fn build_step_sequence(variant: &Variant, _res: &Resolution, cal: &CalibrationData) -> Vec<ClickStep> {
     let mut steps: Vec<ClickStep> = Vec::new();
 
     // Phase 1: Skills — iterate in skill_order, or fall back to sorted skill.keys()
@@ -35,9 +53,9 @@ pub fn build_step_sequence(variant: &Variant, _res: &Resolution) -> Vec<ClickSte
             _ => continue,
         };
         for n in 1..=rank {
-            let x = SkillTreeCoords::ALLOCATE_BUTTON.x
-                + (idx as u32) * SkillTreeCoords::SKILL_GRID_SPACING;
-            let y = SkillTreeCoords::ALLOCATE_BUTTON.y;
+            let x = cal.skill_allocate_button.x
+                + (idx as u32) * cal.skill_grid_spacing;
+            let y = cal.skill_allocate_button.y;
             steps.push(ClickStep {
                 x,
                 y,
@@ -49,8 +67,8 @@ pub fn build_step_sequence(variant: &Variant, _res: &Resolution) -> Vec<ClickSte
     // Phase 2: Equip skills
     for equip in &variant.equip_skills {
         steps.push(ClickStep {
-            x: SkillTreeCoords::ALLOCATE_BUTTON.x,
-            y: SkillTreeCoords::ALLOCATE_BUTTON.y,
+            x: cal.skill_allocate_button.x,
+            y: cal.skill_allocate_button.y,
             label: format!("Equip skill {}", equip.key),
         });
     }
@@ -63,16 +81,16 @@ pub fn build_step_sequence(variant: &Variant, _res: &Resolution) -> Vec<ClickSte
         // Navigate to this board (nav click for boards after the first)
         if board.index > 0 {
             steps.push(ClickStep {
-                x: ParagonBoardCoords::BOARD_NAV_NEXT.x,
-                y: ParagonBoardCoords::BOARD_NAV_NEXT.y,
+                x: cal.paragon_nav_next.x,
+                y: cal.paragon_nav_next.y,
                 label: format!("Navigate to paragon board {}", board.name),
             });
         }
         // One click per node
         for node_id in &board.nodes {
             steps.push(ClickStep {
-                x: ParagonBoardCoords::CENTER.x,
-                y: ParagonBoardCoords::CENTER.y,
+                x: cal.paragon_center.x,
+                y: cal.paragon_center.y,
                 label: format!("Paragon {} node {}", board.name, node_id),
             });
         }
@@ -162,12 +180,15 @@ pub async fn run(
         bring_window_foreground(hwnd)?;
     }
 
+    // Load calibration data
+    let calibration = load_calibration_from_disk(&app)?;
+
     // Build click step sequence from the specified variant
     let variant = plan
         .variants
         .get(variant_index)
         .ok_or(ApplyError::NoBuildPlan)?;
-    let steps = build_step_sequence(variant, &resolution);
+    let steps = build_step_sequence(variant, &resolution, &calibration);
     let total = steps.len();
 
     // Set apply_phase to Running
@@ -231,8 +252,12 @@ pub async fn run(
         }
 
         // Scale coordinates to target resolution
-        let (sx, sy) =
-            crate::auto_applier::coords::scale_coord(step.x, step.y, &resolution);
+        let (sx, sy) = crate::auto_applier::coords::scale_from_calibration(
+            step.x,
+            step.y,
+            calibration.resolution_width,
+            &resolution,
+        );
 
         // Apply jitter for humanization
         let (jx, jy) = crate::auto_applier::humanize::jitter_coord(sx, sy);
