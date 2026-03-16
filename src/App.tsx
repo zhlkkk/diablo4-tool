@@ -52,6 +52,151 @@ interface CalibrationData {
   paragon_nav_prev: { x: number; y: number };
 }
 
+interface CalibrationStep {
+  key: keyof Omit<CalibrationData, "resolution_width" | "resolution_height" | "skill_grid_spacing" | "paragon_node_spacing">;
+  label: string;
+  description: string;
+}
+
+const CALIBRATION_STEPS: CalibrationStep[] = [
+  { key: "skill_allocate_button", label: "技能分配按钮 / Skill Allocate Button", description: "点击游戏中技能分配按钮的位置 / Click the skill allocate button position" },
+  { key: "skill_panel_origin", label: "技能面板起点 / Skill Panel Origin", description: "点击第一个技能槽的左上角 / Click the top-left of the first skill slot" },
+  { key: "paragon_center", label: "传奇天赋中心 / Paragon Board Center", description: "点击传奇天赋面板的中心点 / Click the center of the paragon board" },
+  { key: "paragon_nav_next", label: "下一面板按钮 / Next Board Button", description: "点击切换到下一块传奇天赋面板的按钮 / Click the next paragon board navigation button" },
+  { key: "paragon_nav_prev", label: "上一面板按钮 / Previous Board Button", description: "点击切换到上一块传奇天赋面板的按钮 / Click the previous paragon board navigation button" },
+];
+
+function CalibrationWizard({ onComplete, onCancel }: {
+  onComplete: (data: CalibrationData) => void;
+  onCancel: () => void;
+}) {
+  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [gameWidth, setGameWidth] = useState(1920);
+  const [gameHeight, setGameHeight] = useState(1080);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [points, setPoints] = useState<Record<string, { x: number; y: number }>>({});
+  const [captureError, setCaptureError] = useState<string | null>(null);
+
+  const captureScreenshot = async () => {
+    setCaptureError(null);
+    try {
+      const base64 = await invoke<string>("capture_game_screenshot");
+      setScreenshot(`data:image/png;base64,${base64}`);
+      // Get game resolution from get_game_state
+      try {
+        const state = await invoke<{ raw_width: number; raw_height: number }>("get_game_state");
+        setGameWidth(state.raw_width);
+        setGameHeight(state.raw_height);
+      } catch {
+        // Default 1920x1080 if game state unavailable
+      }
+    } catch (e) {
+      setCaptureError(formatError(String(e)));
+    }
+  };
+
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    const rect = img.getBoundingClientRect();
+    // Scale click coordinates from displayed image size to actual game resolution
+    const scaleX = gameWidth / rect.width;
+    const scaleY = gameHeight / rect.height;
+    const actualX = Math.round((e.clientX - rect.left) * scaleX);
+    const actualY = Math.round((e.clientY - rect.top) * scaleY);
+
+    const step = CALIBRATION_STEPS[currentStep];
+    const newPoints = { ...points, [step.key]: { x: actualX, y: actualY } };
+    setPoints(newPoints);
+
+    if (currentStep < CALIBRATION_STEPS.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // All points captured — build CalibrationData and save
+      const data: CalibrationData = {
+        resolution_width: gameWidth,
+        resolution_height: gameHeight,
+        skill_allocate_button: newPoints.skill_allocate_button,
+        skill_panel_origin: newPoints.skill_panel_origin,
+        skill_grid_spacing: 80, // default, user can adjust later
+        paragon_center: newPoints.paragon_center,
+        paragon_node_spacing: 40, // default
+        paragon_nav_next: newPoints.paragon_nav_next,
+        paragon_nav_prev: newPoints.paragon_nav_prev,
+      };
+      onComplete(data);
+    }
+  };
+
+  if (!screenshot) {
+    return (
+      <div className="calibration-wizard">
+        <h2>校准向导 / Calibration Wizard</h2>
+        <p className="calibration-desc">
+          请确保暗黑破坏神IV正在运行，并打开技能树界面。
+          <br />
+          Make sure Diablo IV is running and the skill tree is open.
+        </p>
+        {captureError && <div className="error-text">{captureError}</div>}
+        <div className="calibration-actions">
+          <button className="btn-primary" onClick={captureScreenshot}>
+            截取游戏画面 / Capture Screenshot
+          </button>
+          <button className="btn-secondary" onClick={onCancel}>
+            取消 / Cancel
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const step = CALIBRATION_STEPS[currentStep];
+  return (
+    <div className="calibration-wizard">
+      <h2>校准向导 / Calibration Wizard</h2>
+      <div className="calibration-step-indicator">
+        步骤 {currentStep + 1}/{CALIBRATION_STEPS.length} — {step.label}
+      </div>
+      <p className="calibration-desc">{step.description}</p>
+      <div className="calibration-image-container">
+        <img
+          src={screenshot}
+          alt="Game screenshot"
+          className="calibration-screenshot"
+          onClick={handleImageClick}
+        />
+        {/* Show previously marked points as dots */}
+        {Object.entries(points).map(([key, pt]) => {
+          // Scale point back to display coordinates for the dot overlay
+          const imgEl = document.querySelector(".calibration-screenshot") as HTMLImageElement | null;
+          if (!imgEl) return null;
+          const rect = imgEl.getBoundingClientRect();
+          const dispX = (pt.x / gameWidth) * rect.width;
+          const dispY = (pt.y / gameHeight) * rect.height;
+          return (
+            <div
+              key={key}
+              className="calibration-dot"
+              style={{ left: `${dispX}px`, top: `${dispY}px` }}
+            />
+          );
+        })}
+      </div>
+      <div className="calibration-actions">
+        <button
+          className="btn-secondary"
+          onClick={() => currentStep > 0 && setCurrentStep(currentStep - 1)}
+          disabled={currentStep === 0}
+        >
+          上一步 / Back
+        </button>
+        <button className="btn-secondary" onClick={onCancel}>
+          取消 / Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const SKILL_NAMES: Record<string, string> = {
   "Basic_Lunging_Strike": "冲刺打击",
   "Core_Whirlwind": "旋风斩",
@@ -360,17 +505,20 @@ function App() {
         <div className="error-text apply-error">{applyError}</div>
       )}
 
-      {/* Calibration modal placeholder — showCalibration state reserved for Plan 03 */}
+      {/* Calibration wizard */}
       {showCalibration && (
-        <div className="calibration-overlay" onClick={() => setShowCalibration(false)}>
-          <div className="calibration-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="calibration-modal-title">校准 / Calibrate</div>
-            <p>校准工具将在下一版本中实现。/ Calibration tool coming in next version.</p>
-            <button className="btn-primary" onClick={() => setShowCalibration(false)}>
-              关闭 / Close
-            </button>
-          </div>
-        </div>
+        <CalibrationWizard
+          onComplete={async (data) => {
+            try {
+              await invoke("save_calibration", { data });
+              setCalibrated(true);
+              setShowCalibration(false);
+            } catch (e) {
+              setApplyError(formatError(String(e)));
+            }
+          }}
+          onCancel={() => setShowCalibration(false)}
+        />
       )}
     </div>
   );
