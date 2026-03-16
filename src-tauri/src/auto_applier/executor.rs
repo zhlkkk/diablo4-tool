@@ -1,5 +1,9 @@
 use crate::auto_applier::coords::{ParagonBoardCoords, SkillTreeCoords};
-use crate::types::{Resolution, Variant};
+use crate::auto_applier::error::ApplyError;
+use crate::types::{ApplyPhase, BuildPlan, Resolution, Variant};
+use std::sync::atomic::Ordering;
+use std::sync::Mutex;
+use tauri::Emitter;
 
 /// A single mouse click step in the automation sequence.
 #[derive(Debug, Clone)]
@@ -77,6 +81,223 @@ pub fn build_step_sequence(variant: &Variant, _res: &Resolution) -> Vec<ClickSte
     steps
 }
 
+/// Simulate a left mouse click at absolute screen coordinates.
+/// Wrapped in spawn_blocking so async callers don't block the tokio runtime.
+#[cfg(windows)]
+pub async fn click_at(x: u32, y: u32) -> Result<(), ApplyError> {
+    tokio::task::spawn_blocking(move || {
+        use enigo::{Button, Coordinate, Direction::Click, Enigo, Mouse, Settings};
+        let mut enigo = Enigo::new(&Settings::default())
+            .map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+        enigo
+            .move_mouse(x as i32, y as i32, Coordinate::Abs)
+            .map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+        enigo
+            .button(Button::Left, Click)
+            .map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+        Ok::<_, ApplyError>(())
+    })
+    .await
+    .map_err(|e| ApplyError::TaskPanic(e.to_string()))?
+}
+
+#[cfg(not(windows))]
+pub async fn click_at(_x: u32, _y: u32) -> Result<(), ApplyError> {
+    Err(ApplyError::InputFailed(
+        "Mouse input only available on Windows".to_string(),
+    ))
+}
+
+/// Bring the game window to the foreground before automation starts.
+#[cfg(windows)]
+pub fn bring_window_foreground(hwnd: windows::Win32::Foundation::HWND) -> Result<(), ApplyError> {
+    use windows::Win32::UI::WindowsAndMessaging::SetForegroundWindow;
+    unsafe {
+        SetForegroundWindow(hwnd);
+    }
+    Ok(())
+}
+
+#[cfg(not(windows))]
+pub fn bring_window_foreground(_hwnd: usize) -> Result<(), ApplyError> {
+    Ok(())
+}
+
+/// Run the full automation sequence for the given BuildPlan.
+///
+/// Accepts `&Mutex<AppState>` (not Arc-wrapped) — matches `state.inner()` from Tauri.
+/// Locks state briefly at start to extract config, then releases before any async work.
+pub async fn run(
+    plan: BuildPlan,
+    app: tauri::AppHandle,
+    state: &Mutex<crate::types::AppState>,
+) -> Result<(), ApplyError> {
+    // Extract game state and cancel flag under a brief lock
+    let (resolution, cancel_flag, resume_step) = {
+        let s = state.lock().unwrap();
+        let game_state = s.game_state.as_ref().ok_or(ApplyError::NoGameState)?;
+        let resolution = game_state
+            .resolution
+            .clone()
+            .ok_or(ApplyError::UnsupportedResolution {
+                width: game_state.raw_width,
+                height: game_state.raw_height,
+            })?;
+        let cancel_flag = s.cancel_flag.clone();
+        // Check if we're resuming from a paused step
+        let resume_step = match s.apply_phase {
+            ApplyPhase::Paused { step, .. } => step,
+            _ => 0,
+        };
+        (resolution, cancel_flag, resume_step)
+    };
+
+    // Bring game window to foreground (Windows-only)
+    #[cfg(windows)]
+    {
+        let hwnd = crate::game_capture::window::find_diablo_window()
+            .map_err(|e| ApplyError::InputFailed(e.to_string()))?;
+        bring_window_foreground(hwnd)?;
+    }
+
+    // Build click step sequence from first variant
+    let variant = plan
+        .variants
+        .first()
+        .ok_or(ApplyError::NoBuildPlan)?;
+    let steps = build_step_sequence(variant, &resolution);
+    let total = steps.len();
+
+    // Set apply_phase to Running
+    {
+        let mut s = state.lock().unwrap();
+        s.apply_phase = ApplyPhase::Running {
+            step: resume_step,
+            total,
+        };
+    }
+
+    // Emit automation started event
+    let _ = app.emit(
+        "safety_event",
+        crate::safety::SafetyEvent::AutomationStarted,
+    );
+
+    // Execute each step starting from resume_step
+    for (i, step) in steps.iter().enumerate().skip(resume_step) {
+        // Check cancel flag before each click
+        if cancel_flag.load(Ordering::SeqCst) {
+            // Check if it's a pause (apply_phase will be Paused) or full cancel
+            let is_paused = {
+                let s = state.lock().unwrap();
+                matches!(s.apply_phase, ApplyPhase::Paused { .. })
+            };
+            if is_paused {
+                return Ok(());
+            } else {
+                return Err(ApplyError::Cancelled);
+            }
+        }
+
+        // Capture screenshot and run safety check (Windows-only path)
+        #[cfg(windows)]
+        {
+            let hwnd = crate::game_capture::window::find_diablo_window()
+                .map_err(|e| ApplyError::CaptureFailed(e.to_string()))?;
+            let (width, height) = crate::game_capture::dpi::get_game_resolution(hwnd)
+                .map_err(|e| ApplyError::CaptureFailed(e.to_string()))?;
+            let pixels = crate::game_capture::screenshot::capture_window(hwnd, width, height)
+                .map_err(|e| ApplyError::CaptureFailed(e.to_string()))?;
+
+            match crate::safety::assert_safe_state(&pixels, width, height, &cancel_flag) {
+                Ok(_) => {}
+                Err(e) => {
+                    let reason = e.to_string();
+                    let _ = app.emit(
+                        "safety_event",
+                        crate::safety::SafetyEvent::AutomationAborted {
+                            reason: reason.clone(),
+                        },
+                    );
+                    let mut s = state.lock().unwrap();
+                    s.apply_phase = ApplyPhase::Aborted {
+                        reason: reason.clone(),
+                    };
+                    return Err(ApplyError::SafetyFailure(reason));
+                }
+            }
+        }
+
+        // Scale coordinates to target resolution
+        let (sx, sy) =
+            crate::auto_applier::coords::scale_coord(step.x, step.y, &resolution);
+
+        // Apply jitter for humanization
+        let (jx, jy) = crate::auto_applier::humanize::jitter_coord(sx, sy);
+
+        // Perform the click
+        click_at(jx, jy).await?;
+
+        // Update apply_phase progress under brief lock
+        {
+            let mut s = state.lock().unwrap();
+            s.apply_phase = ApplyPhase::Running {
+                step: i + 1,
+                total,
+            };
+        }
+
+        // Emit progress event
+        let _ = app.emit(
+            "apply_progress",
+            serde_json::json!({
+                "step": i + 1,
+                "total": total,
+                "label": step.label
+            }),
+        );
+
+        // Random delay between clicks
+        let delay_ms = crate::auto_applier::humanize::random_delay_ms();
+        tokio::time::sleep(std::time::Duration::from_millis(delay_ms)).await;
+    }
+
+    // Sequence complete
+    {
+        let mut s = state.lock().unwrap();
+        s.apply_phase = ApplyPhase::Complete;
+    }
+    let _ = app.emit("apply_complete", serde_json::json!({"status": "complete"}));
+
+    Ok(())
+}
+
+/// Pause automation: set the cancel flag and update apply_phase to Paused.
+/// The run() loop checks this flag before each click and returns Ok() when paused.
+pub fn pause(state: &Mutex<crate::types::AppState>) {
+    let mut s = state.lock().unwrap();
+    s.cancel_flag.store(true, Ordering::SeqCst);
+    if let ApplyPhase::Running { step, total } = s.apply_phase {
+        s.apply_phase = ApplyPhase::Paused { step, total };
+    }
+}
+
+/// Resume automation from the saved pause point.
+/// Clears cancel flag, reads build_plan, and re-runs the executor (which detects Paused state).
+pub async fn resume(
+    app: tauri::AppHandle,
+    state: &Mutex<crate::types::AppState>,
+) -> Result<(), ApplyError> {
+    // Clear cancel flag and clone build plan under brief lock
+    let plan = {
+        let s = state.lock().unwrap();
+        s.cancel_flag.store(false, Ordering::SeqCst);
+        s.build_plan.clone().ok_or(ApplyError::NoBuildPlan)?
+    };
+
+    run(plan, app, state).await
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -129,7 +350,9 @@ mod tests {
         assert!(!skill_indices.is_empty(), "No skill steps found");
         assert!(!paragon_indices.is_empty(), "No paragon steps found");
         assert!(
-            skill_indices.iter().all(|&si| paragon_indices.iter().all(|&pi| si < pi)),
+            skill_indices
+                .iter()
+                .all(|&si| paragon_indices.iter().all(|&pi| si < pi)),
             "Skill steps must all come before paragon steps"
         );
     }
