@@ -1,2 +1,4 @@
-// Safety module — implemented in Plan 03
-// Detects game UI state via pixel sampling, gates automation on safe state
+// Safety module — detects game UI state via pixel sampling, gates automation on safe state
+
+pub mod detector;
+pub mod error;
