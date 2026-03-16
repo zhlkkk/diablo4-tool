@@ -126,6 +126,71 @@ async fn start_apply(
         .map_err(|e| e.to_string())
 }
 
+/// Tauri command: Load calibration data from appDataDir/calibration.json.
+/// Returns None if the file does not exist yet.
+#[tauri::command]
+async fn load_calibration(app: tauri::AppHandle) -> Result<Option<CalibrationData>, String> {
+    use tauri::Manager;
+    let dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let path = dir.join("calibration.json");
+    if !path.exists() {
+        return Ok(None);
+    }
+    let contents = std::fs::read_to_string(&path).map_err(|e| e.to_string())?;
+    let data: CalibrationData = serde_json::from_str(&contents).map_err(|e| e.to_string())?;
+    Ok(Some(data))
+}
+
+/// Tauri command: Save calibration data to appDataDir/calibration.json.
+/// Creates the app data directory if it does not exist.
+#[tauri::command]
+async fn save_calibration(app: tauri::AppHandle, data: CalibrationData) -> Result<(), String> {
+    use tauri::Manager;
+    let dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let path = dir.join("calibration.json");
+    let json = serde_json::to_string_pretty(&data).map_err(|e| e.to_string())?;
+    std::fs::write(&path, json).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+/// Tauri command: Capture the game window and return a base64-encoded PNG string.
+/// Pixels from Windows BitBlt are BGRA — swapped to RGBA before encoding.
+#[cfg(windows)]
+#[tauri::command]
+fn capture_game_screenshot() -> Result<String, String> {
+    let hwnd = game_capture::window::find_diablo_window().map_err(|e| e.to_string())?;
+    let (width, height) = game_capture::dpi::get_game_resolution(hwnd).map_err(|e| e.to_string())?;
+    let pixels = game_capture::screenshot::capture_window(hwnd, width, height)
+        .map_err(|e| e.to_string())?;
+
+    // pixels are BGRA from Windows BitBlt — swap to RGBA for image crate
+    let mut rgba_pixels = pixels.clone();
+    for chunk in rgba_pixels.chunks_exact_mut(4) {
+        chunk.swap(0, 2); // swap B and R
+    }
+
+    use image::{ImageBuffer, Rgba};
+    let img = ImageBuffer::<Rgba<u8>, _>::from_raw(width, height, rgba_pixels)
+        .ok_or_else(|| "Failed to create image buffer".to_string())?;
+    let mut png_bytes: Vec<u8> = Vec::new();
+    img.write_to(
+        &mut std::io::Cursor::new(&mut png_bytes),
+        image::ImageFormat::Png,
+    )
+    .map_err(|e| e.to_string())?;
+
+    use base64::Engine;
+    Ok(base64::engine::general_purpose::STANDARD.encode(&png_bytes))
+}
+
+/// Stub for non-Windows: screenshot capture requires Win32 BitBlt.
+#[cfg(not(windows))]
+#[tauri::command]
+fn capture_game_screenshot() -> Result<String, String> {
+    Err("Screenshot capture is only available on Windows".to_string())
+}
+
 /// Tauri command: Pause ongoing automation.
 /// Sets cancel flag and saves current step index for resume.
 #[tauri::command]
@@ -162,6 +227,9 @@ pub fn run() {
             start_apply,
             pause_apply,
             resume_apply,
+            load_calibration,
+            save_calibration,
+            capture_game_screenshot,
         ])
         .setup(move |app| {
             // Register F10 emergency stop hotkey
