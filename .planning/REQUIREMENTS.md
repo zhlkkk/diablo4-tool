@@ -24,12 +24,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Safety Module
 
-- [ ] **SAFE-01**: Safety module detects whether Diablo IV is in a safe UI state for automation (character select, skill tree screen, paragon board screen)
-- [ ] **SAFE-02**: Safety module refuses to start automation if game is not in a recognized safe state
-- [ ] **SAFE-03**: Safety module re-checks game state before each click step (not just once at start)
+- [x] **SAFE-01**: Safety module detects whether Diablo IV is in a safe UI state for automation (character select, skill tree screen, paragon board screen)
+- [x] **SAFE-02**: Safety module refuses to start automation if game is not in a recognized safe state
+- [x] **SAFE-03**: Safety module re-checks game state before each click step (not just once at start)
 - [ ] **SAFE-04**: Safety module provides immediate emergency stop (hotkey or button) that halts all automation
-- [ ] **SAFE-05**: Safety module logs all automation decisions (start, stop, state checks) for user transparency
-- [ ] **SAFE-06**: Unit tests verify safety module correctly identifies safe vs unsafe states
+- [x] **SAFE-05**: Safety module logs all automation decisions (start, stop, state checks) for user transparency
+- [x] **SAFE-06**: Unit tests verify safety module correctly identifies safe vs unsafe states
 
 ### Game Capture
 
@@ -96,12 +96,12 @@ Requirements for initial release. Each maps to roadmap phases.
 |-------------|-------|--------|
 | SPIKE-01 | Phase 1 — Research Spike | Complete (2026-03-16) |
 | SPIKE-02 | Phase 1 — Research Spike | Complete (2026-03-16) |
-| SAFE-01 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
-| SAFE-02 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
-| SAFE-03 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-01 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
+| SAFE-02 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
+| SAFE-03 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | SAFE-04 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
-| SAFE-05 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
-| SAFE-06 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-05 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
+| SAFE-06 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | CAPT-01 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | CAPT-02 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | CAPT-03 | Phase 2 — Scaffold + Safety + Game Capture | Complete |

@@ -94,7 +94,7 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
-| 2. Scaffold + Safety + Game Capture | 1/4 | In progress | - |
+| 2. Scaffold + Safety + Game Capture | 3/4 | In Progress|  |
 | 3. Web Parser | 0/? | Not started | - |
 | 4. Auto Applier | 0/? | Not started | - |
 | 5. GUI + Integration | 0/? | Not started | - |
