@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: completed
 stopped_at: Completed 05-gui-integration-05-04-PLAN.md
-last_updated: "2026-03-16T13:47:21.453Z"
-last_activity: 2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors)
+last_updated: "2026-03-16T14:14:29.394Z"
+last_activity: 2026-03-16 — Phase 5 Plan 04 complete (CalibrationData wired into executor with scale_from_calibration)
 progress:
   total_phases: 5
   completed_phases: 5
