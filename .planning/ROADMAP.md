@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Scaffold + Safety + Game Capture** - Project skeleton, corrected safety invariant, and game window capture module — COMPLETE 2026-03-16
 - [x] **Phase 3: Web Parser** - d2core link parsing and BuildPlan extraction, informed by Phase 1 findings (completed 2026-03-16)
 - [x] **Phase 4: Auto Applier** - Resolution-adaptive skill and paragon click automation with humanization and safety re-checks (completed 2026-03-16)
-- [x] **Phase 5: GUI + Integration** - Frontend interface, build preview, controls, and end-to-end wiring (completed 2026-03-16)
+- [ ] **Phase 5: GUI + Integration** - Frontend interface, build preview, controls, and end-to-end wiring (gap closure in progress)
 
 ## Phase Details
 
@@ -92,12 +92,13 @@ Plans:
   2. User sees real-time per-step progress (which skill or paragon node is currently being applied) during automation
   3. User sees clear, specific error messages for every failure state: game not found, invalid link, unsafe game state
   4. The app window remains interactive (scrollable, clickable) while a long-running automation sequence is running in the background
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 05-01-PLAN.md — Backend: CalibrationData type, calibration I/O commands, screenshot capture, variant_index support — COMPLETE 2026-03-16
-- [ ] 05-02-PLAN.md — Frontend: variant selector, apply controls, progress bar, event listeners, bilingual errors
-- [ ] 05-03-PLAN.md — Calibration wizard UI and human verification of complete flow
+- [x] 05-02-PLAN.md — Frontend: variant selector, apply controls, progress bar, event listeners, bilingual errors — COMPLETE 2026-03-16
+- [x] 05-03-PLAN.md — Calibration wizard UI and human verification of complete flow — COMPLETE 2026-03-16
+- [ ] 05-04-PLAN.md — Gap closure: wire CalibrationData into executor click coordinate resolution
 
 ## Progress
 
@@ -111,4 +112,4 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
 | 3. Web Parser | 3/3 | Complete   | 2026-03-16 |
 | 4. Auto Applier | 2/2 | Complete   | 2026-03-16 |
-| 5. GUI + Integration | 3/3 | Complete   | 2026-03-16 |
+| 5. GUI + Integration | 3/4 | Gap Closure   | — |
