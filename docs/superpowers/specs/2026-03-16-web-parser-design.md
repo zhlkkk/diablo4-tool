@@ -57,7 +57,9 @@ Each variant contains:
 - `paragon: { "Board_Name": { data, glyph, index, rotate }, ... }` — paragon boards
 - `gear`, `pact`, `construct`, `mercenary`, `expertise` — other build data
 
-### Public Credentials (embedded in JS bundle)
+### Public Credentials (reference only — NOT used in requests)
+
+These are embedded in d2core's JS bundle for documentation purposes. They are **not included** in the HTTP request — read operations work without authentication. If the API begins requiring auth in the future, these values would need to be sent in the request body per TCB SDK conventions.
 
 ```
 env: "diablocore-4gkv4qjs9c6a0b40"
@@ -114,8 +116,9 @@ pub struct ParagonBoard {
     pub name: String,          // "Paragon_Druid_00"
     pub index: u32,            // board order position
     pub rotate: u32,           // 0-3 (0°/90°/180°/270°)
+    #[serde(rename = "data")]
     pub nodes: Vec<String>,    // ["y_x", ...] coordinates on 21x21 grid
-    pub glyph: Option<String>, // glyph name if assigned
+    pub glyph: Option<String>, // extracted from API's {"0": "glyph_name"} object
 }
 ```
 
@@ -123,8 +126,11 @@ pub struct ParagonBoard {
 
 - `skill` uses `HashMap<u32, u32>` — API returns numeric IDs, not string keys
 - `paragon` converts from API's `HashMap<String, BoardData>` to `Vec<ParagonBoard>` sorted by `index`
+- `ParagonBoard.nodes` uses `#[serde(rename = "data")]` — API field is `data`, renamed for clarity
+- `ParagonBoard.glyph` requires custom deserialization: API returns `{"0": "glyph_name"}` object, parsed to `Option<String>` by extracting the first value
 - Zero-point skill entries filtered during deserialization
 - All structs derive `serde::Deserialize` for automatic JSON parsing
+- Unknown fields silently ignored (`serde` default) — allows API evolution without breaking the parser
 
 ## API Client
 
@@ -180,6 +186,12 @@ pub enum ParserError {
 
 TCB env ID and endpoint are hardcoded constants (matching d2core's JS bundle). No auth token needed for reads. If d2core changes env ID, a new app version is required. No automatic credential scraping — this is more reliable and secure.
 
+### Timeouts
+
+- Connect timeout: 10 seconds
+- Total request timeout: 30 seconds
+- On timeout: return `ParserError::NetworkError` with user message "d2core.com 请求超时"
+
 ## Testing Strategy
 
 ### Unit Tests (no network)
@@ -216,8 +228,8 @@ test_live_error_handling                invalid ID returns correct error
 
 | Build ID | Class | Variants | Skills | Equip Skills | Paragon Boards | Status |
 |----------|-------|----------|--------|--------------|----------------|--------|
-| 1QMw | Paladin | 4 | 35 (71 pts) | 6 | 5 | ✓ 200 OK, 63KB |
-| 1qHh | Druid | 1 | 41 (71 pts) | 6 | 5 | ✓ 200 OK |
+| 1QMw | Paladin | 4 | 44 raw → 35 after zero-filter (71 pts) | 6 | 5 | ✓ 200 OK, 63KB |
+| 1qHh | Druid | 1 | 45 raw → 41 after zero-filter (71 pts) | 6 | 5 | ✓ 200 OK |
 
 ## Risks
 

@@ -9,15 +9,15 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Research Spike
 
-- [x] **SPIKE-01**: Developer can confirm whether d2core.com API includes skill allocation data by inspecting live network traffic — COMPLETE 2026-03-16 (verdict: NO API exists; bd= client-side decoded)
-- [x] **SPIKE-02**: Developer has documented the exact d2core API endpoint, request format, and response JSON schema for builds — COMPLETE 2026-03-16 (no API; DOM selectors and bd= encoding documented in SPIKE-FINDINGS.md)
+- [x] **SPIKE-01**: Developer can confirm whether d2core.com API includes skill allocation data by inspecting live network traffic — COMPLETE 2026-03-16 (REVISED: API EXISTS via Tencent CloudBase; skills ARE in response as `variants[].skill` + `variants[].equipSkills`)
+- [x] **SPIKE-02**: Developer has documented the exact d2core API endpoint, request format, and response JSON schema for builds — COMPLETE 2026-03-16 (REVISED: TCB endpoint verified with live 200 OK responses; full schema documented in SPIKE-FINDINGS.md)
 
 ### Web Parser
 
 - [ ] **PARSE-01**: User can paste a d2core.com/d4/planner?bd=XXXX link and the app extracts the build ID
 - [ ] **PARSE-02**: App calls d2core.com API with the build ID and retrieves the full build JSON response
 - [ ] **PARSE-03**: App parses paragon board data (board names, node coordinates, glyphs, rotation) from API response into a typed BuildPlan
-- [ ] **PARSE-04**: App parses skill allocation data from API response into the BuildPlan (contingent on SPIKE-01 confirming availability)
+- [ ] **PARSE-04**: App parses skill allocation data from API response into the BuildPlan (SPIKE-01 confirmed: skills available in API)
 - [ ] **PARSE-05**: App displays a human-readable build preview (skills + paragon) in the GUI before any automation
 - [ ] **PARSE-06**: Parser handles invalid/expired build IDs with clear error messages
 - [ ] **PARSE-07**: Parser has pinned test vectors for known-good builds with unit tests
