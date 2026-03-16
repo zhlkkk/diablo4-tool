@@ -127,8 +127,10 @@ pub fn bring_window_foreground(_hwnd: usize) -> Result<(), ApplyError> {
 ///
 /// Accepts `&Mutex<AppState>` (not Arc-wrapped) — matches `state.inner()` from Tauri.
 /// Locks state briefly at start to extract config, then releases before any async work.
+/// `variant_index` selects which variant from the plan to apply (0-based).
 pub async fn run(
     plan: BuildPlan,
+    variant_index: usize,
     app: tauri::AppHandle,
     state: &Mutex<crate::types::AppState>,
 ) -> Result<(), ApplyError> {
@@ -160,10 +162,10 @@ pub async fn run(
         bring_window_foreground(hwnd)?;
     }
 
-    // Build click step sequence from first variant
+    // Build click step sequence from the specified variant
     let variant = plan
         .variants
-        .first()
+        .get(variant_index)
         .ok_or(ApplyError::NoBuildPlan)?;
     let steps = build_step_sequence(variant, &resolution);
     let total = steps.len();
@@ -295,7 +297,8 @@ pub async fn resume(
         s.build_plan.clone().ok_or(ApplyError::NoBuildPlan)?
     };
 
-    run(plan, app, state).await
+    // Resume always uses variant 0 for v1 — user cannot change variant mid-apply
+    run(plan, 0, app, state).await
 }
 
 #[cfg(test)]
@@ -385,6 +388,20 @@ mod tests {
         let variant = empty_variant();
         let steps = build_step_sequence(&variant, &Resolution::Res1080p);
         assert!(steps.is_empty(), "Empty variant should produce no steps");
+    }
+
+    #[test]
+    fn test_step_sequence_uses_specified_variant() {
+        let mut v0 = empty_variant();
+        v0.skill.insert(1, 1);
+
+        let mut v1 = empty_variant();
+        v1.skill.insert(99, 2);
+
+        // Build steps for variant index 1 (v1 with skill 99, rank 2)
+        let steps = build_step_sequence(&v1, &Resolution::Res1080p);
+        assert_eq!(steps.len(), 2, "Variant 1 should produce 2 steps for skill 99 rank 2");
+        assert!(steps[0].label.contains("Skill 99"), "Steps should reference skill 99, got: {}", steps[0].label);
     }
 
     #[test]

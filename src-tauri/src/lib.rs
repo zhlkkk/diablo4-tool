@@ -106,10 +106,12 @@ async fn parse_build_link(
 
 /// Tauri command: Start automation — applies the loaded BuildPlan to the game character.
 /// Reads build_plan from AppState, then delegates to executor::run().
+/// `variant_index` selects which variant to apply (0-based).
 #[tauri::command]
 async fn start_apply(
     app: tauri::AppHandle,
     state: tauri::State<'_, Mutex<AppState>>,
+    variant_index: usize,
 ) -> Result<String, String> {
     let plan = {
         let s = state.lock().unwrap();
@@ -118,7 +120,7 @@ async fn start_apply(
             .ok_or_else(|| "No build plan loaded".to_string())?
     };
     // state.inner() returns &Mutex<AppState> — matches run() signature directly
-    auto_applier::executor::run(plan, app, state.inner())
+    auto_applier::executor::run(plan, variant_index, app, state.inner())
         .await
         .map(|_| "Apply complete".to_string())
         .map_err(|e| e.to_string())

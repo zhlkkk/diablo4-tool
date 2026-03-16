@@ -115,3 +115,29 @@ impl AppState {
         }
     }
 }
+
+// === Calibration Data ===
+
+/// A serde-compatible 2D point for calibration coordinates.
+/// Separate from auto_applier::coords::Point2D (which is Copy-only, not Serialize).
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CalibrationPoint {
+    pub x: u32,
+    pub y: u32,
+}
+
+/// Calibration data saved to appDataDir/calibration.json.
+/// Coordinates are captured at the resolution specified by resolution_width/height.
+/// scale_factor from coords.rs is applied at runtime for other resolutions.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CalibrationData {
+    pub resolution_width: u32,
+    pub resolution_height: u32,
+    pub skill_allocate_button: CalibrationPoint,
+    pub skill_panel_origin: CalibrationPoint,
+    pub skill_grid_spacing: u32,
+    pub paragon_center: CalibrationPoint,
+    pub paragon_node_spacing: u32,
+    pub paragon_nav_next: CalibrationPoint,
+    pub paragon_nav_prev: CalibrationPoint,
+}
