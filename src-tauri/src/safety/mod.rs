@@ -2,6 +2,7 @@
 
 pub mod detector;
 pub mod error;
+pub mod hotkey;
 
 pub use detector::{detect_safe_state, get_pixel, SamplePoint};
 pub use error::SafetyError;
