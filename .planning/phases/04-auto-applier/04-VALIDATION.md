@@ -38,14 +38,13 @@ created: 2026-03-16
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 04-01-01 | 01 | 1 | APPLY-03, APPLY-04 | unit | `cargo test -p diablo4-tool --lib auto_applier::coords` | ❌ W0 | ⬜ pending |
-| 04-01-02 | 01 | 1 | APPLY-04 | unit | `cargo test -p diablo4-tool --lib auto_applier::humanize` | ❌ W0 | ⬜ pending |
-| 04-02-01 | 02 | 1 | APPLY-01 | unit | `cargo test -p diablo4-tool --lib auto_applier::executor` | ❌ W0 | ⬜ pending |
-| 04-02-02 | 02 | 1 | APPLY-02 | unit | `cargo test -p diablo4-tool --lib auto_applier::executor` | ❌ W0 | ⬜ pending |
-| 04-03-01 | 03 | 2 | APPLY-05, APPLY-06 | unit | `cargo test -p diablo4-tool --lib auto_applier` | ❌ W0 | ⬜ pending |
-| 04-03-02 | 03 | 2 | APPLY-07 | unit | `cargo test -p diablo4-tool --lib auto_applier::coords` | ❌ W0 | ⬜ pending |
+| 04-01-01 | 01 | 1 | APPLY-03 | unit | `cargo test -p diablo4-tool --lib auto_applier::coords` | W0 | pending |
+| 04-01-02 | 01 | 1 | APPLY-04 | unit | `cargo test -p diablo4-tool --lib auto_applier::humanize` | W0 | pending |
+| 04-02-01 | 02 | 2 | APPLY-01, APPLY-02 | unit | `cargo test -p diablo4-tool --lib auto_applier::executor` | W0 | pending |
+| 04-02-02 | 02 | 2 | APPLY-05, APPLY-06 | unit | `cargo test -p diablo4-tool --lib auto_applier::executor` | W0 | pending |
+| 04-02-03 | 02 | 2 | APPLY-07 | compile | `cargo check -p diablo4-tool` | N/A | pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: pending / green / red / flaky*
 
 ---
 
