@@ -9,3 +9,4 @@ mod parse;
 pub use error::ParserError;
 pub use extract::extract_build_id;
 pub use client::D2CoreClient;
+pub use parse::parse_build_response;

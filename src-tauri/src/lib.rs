@@ -1,7 +1,7 @@
 mod types;
 mod safety;
 mod game_capture;
-mod web_parser;
+pub mod web_parser;
 mod auto_applier;
 
 pub use types::*;
