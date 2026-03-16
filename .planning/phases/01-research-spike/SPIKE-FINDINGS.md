@@ -1,47 +1,59 @@
 # d2core.com API — Spike Findings
 
 **Investigation date:** 2026-03-16
-**Investigator:** Developer (live browser DevTools session)
-**Status:** COMPLETE
+**Investigator:** Automated JS bundle analysis + live API verification
+**Status:** COMPLETE (REVISED — original DevTools investigation was incorrect)
 
 ---
 
 ## Verdict
 
-SKILLS_IN_API: NO
-ARCHITECTURE_DECISION: dom-fallback
+SKILLS_IN_API: YES
+ARCHITECTURE_DECISION: direct-http
 
 ---
 
 ## API Endpoint
 
-URL: NONE — no HTTP API call exists for build data
-Method: N/A
-Auth required: NO
-Auth type (if yes): N/A
+URL: `https://diablocore-4gkv4qjs9c6a0b40.ap-shanghai.tcb-api.tencentcloudapi.com/web?env=diablocore-4gkv4qjs9c6a0b40`
+Method: POST
+Auth required: NO (public app credentials embedded in JS bundle)
+Platform: Tencent CloudBase (腾讯云开发), NOT Firebase
 
-**Key finding:** The `function-planner-queryplan` Cloud Function endpoint does NOT exist or is not
-called during page load. The `bd=` query parameter is decoded entirely client-side by JavaScript.
-No POST or XHR/Fetch request to any `cloudfunctions.net` or similar backend is made when loading a
-build URL. The page is a client-rendered SPA (React/Next.js or Nuxt.js) where the `bd=` value is
-decoded in-browser.
+**Key finding:** The original DevTools investigation incorrectly concluded no API exists. The d2core.com
+SPA uses the Tencent CloudBase JS SDK which makes POST requests to a non-obvious TCB endpoint.
+The API call was likely missed because:
+1. The endpoint domain (`tcb-api.tencentcloudapi.com`) doesn't match Firebase patterns searched for
+2. The request may have been filtered out or fired before "Preserve log" was enabled
+3. The TCB SDK request format is not a standard REST call
+
+Analysis of the 1.9MB JS bundle (`/assets/index-CxYwtc2P.js`) revealed the exact call chain:
+`queryPlan({bd, enableVariant}) → cloudRequest({funcName}) → cloudbase.callFunction() → POST to TCB`
+
+**Public app credentials (embedded in JS bundle):**
+- env: `diablocore-4gkv4qjs9c6a0b40`
+- appSign: `diablocore`
+- appSecret: `{appAccessKeyId: 1, appAccessKey: "ed6fe96e6ca08acf392d360094a58477"}`
 
 ---
 
 ## Request Format
 
 ```
-No outbound API request was observed.
+POST https://diablocore-4gkv4qjs9c6a0b40.ap-shanghai.tcb-api.tencentcloudapi.com/web?env=diablocore-4gkv4qjs9c6a0b40
+Content-Type: application/json;charset=UTF-8
+x-sdk-version: @cloudbase/js-sdk/1.0.0
 
-Only a standard HTTP GET for the HTML page itself was made:
-  GET https://www.d2core.com/d4/planner?bd=1QMw HTTP/2
-  Headers: standard browser headers (Accept, Accept-Language, etc.)
-  Body: none (GET request)
-
-No POST to queryplan or any build-data endpoint.
-No Authorization header.
-No Firebase token transmitted.
+{
+  "action": "functions.invokeFunction",
+  "dataVersion": "2019-08-16",
+  "env": "diablocore-4gkv4qjs9c6a0b40",
+  "function_name": "function-planner-queryplan",
+  "request_data": "{\"bd\":\"1QMw\",\"enableVariant\":true}"
+}
 ```
+
+Note: `request_data` is a JSON-encoded string (double-serialized). No auth token required for read operations.
 
 ---
 
@@ -49,77 +61,110 @@ No Firebase token transmitted.
 
 ### Raw outer JSON
 
+```json
+{
+  "data": {
+    "response_data": "{\"data\":{\"_id\":\"1QMw\",\"char\":\"Paladin\",\"title\":\"...\",\"variants\":[...]}}"
+  },
+  "requestId": "..."
+}
 ```
-NOT APPLICABLE — there is no API JSON response.
 
-The server returns an HTML document (the planner SPA shell). Build data is decoded
-client-side from the bd= parameter value. The HTML response contains JavaScript bundles
-that perform this decoding.
-```
+### Inner schema (after JSON.parse of response_data)
 
-### Inner schema (after double-decode of response_data)
-
-```
-NOT APPLICABLE — no server response_data field exists.
-
-The bd= parameter appears to encode the full build state in a compressed/encoded format
-(likely base64 + custom compression or a URL-safe encoding). This encoding is decoded
-entirely in the browser JavaScript without any server round-trip.
+```json
+{
+  "data": {
+    "_id": "1QMw",
+    "char": "Paladin",
+    "title": "【琉璃】S12圣骑士开荒构筑分享",
+    "_createTime": 1773169200000,
+    "_updateTime": 1773169200000,
+    "variants": [
+      {
+        "name": "variant name",
+        "skill": { "6": 0, "16": 1, "47": 3, "49": 3, ... },
+        "skillOrder": [...],
+        "equipSkills": [
+          {
+            "key": "druid_wolves",
+            "mods": ["Brutal Wolf Pack", "Enhanced Wolf Pack"],
+            "rank": 5
+          }
+        ],
+        "gear": { "<slot>": { "itemType": "...", "key": "...", "mods": [...] } },
+        "paragon": {
+          "<board_name>": {
+            "data": ["y_x", ...],
+            "glyph": { "0": "<glyph_name>" },
+            "index": 0,
+            "rotate": 0
+          }
+        },
+        "pact": {},
+        "construct": {},
+        "witch": {},
+        "bossPower": {},
+        "seasonPower": {},
+        "mercenary": {},
+        "expertise": []
+      }
+    ]
+  }
+}
 ```
 
 ### Annotated field reference
 
 | Field path | Type | Description | Source confidence |
 |------------|------|-------------|------------------|
-| bd= parameter | string | URL-safe encoded build state | HIGH — observed directly |
-| DOM: .skill-node[data-skill-id] | string | Skill identifier | HIGH — from live DOM inspection |
-| DOM: .skill-node[data-rank] | string | Skill rank/level | HIGH — from live DOM inspection |
-| DOM: .skill-node[data-upgrades] | string | Upgrade path (comma-separated) | HIGH — from live DOM inspection |
-| DOM: .paragon-node[data-coord] | string | Paragon board coordinate [x,y] | HIGH — from live DOM inspection |
-| DOM: .paragon-node[data-type] | string | Paragon node type (e.g. "glyph") | HIGH — from live DOM inspection |
-| data.char (inferred from DOM) | string | Character class | HIGH — "Paladin" visible in DOM |
-| data.skills (ABSENT from API) | N/A | No API exists; skills only in DOM | N/A — no API response |
+| data._id | string | Build ID (same as bd= param) | HIGH — verified |
+| data.char | string | Character class ("Paladin", "Druid", etc.) | HIGH — verified |
+| data.title | string | Build title (Chinese text) | HIGH — verified |
+| data.variants[] | array | Build variants (multiple loadouts) | HIGH — verified |
+| variants[].skill | object | Skill allocations: numeric skill ID → point count | HIGH — verified |
+| variants[].skillOrder | array | Order of skill allocation (for replay) | HIGH — verified |
+| variants[].equipSkills | array | Equipped active skills with mods and rank | HIGH — verified |
+| variants[].equipSkills[].key | string | Skill key identifier (e.g. "druid_wolves") | HIGH — verified |
+| variants[].equipSkills[].mods | array | Selected skill upgrades/runes | HIGH — verified |
+| variants[].equipSkills[].rank | number | Skill rank/level | HIGH — verified |
+| variants[].paragon | object | Paragon boards keyed by board name | HIGH — verified |
+| variants[].paragon.<board>.data | array | Node coordinates on 21x21 grid ("y_x" format) | HIGH — verified |
+| variants[].paragon.<board>.glyph | object | Glyph assignments | HIGH — verified |
+| variants[].paragon.<board>.index | number | Board order position | HIGH — verified |
+| variants[].paragon.<board>.rotate | number | Board rotation (0=0°, 1=90°, 2=180°, 3=270°) | HIGH — verified |
+| variants[].gear | object | Equipment per slot | HIGH — verified |
+| variants[].pact | object | Pact selections | HIGH — verified |
+| variants[].construct | object | Construct data | HIGH — verified |
+| variants[].mercenary | object | Mercenary configuration | HIGH — verified |
+| variants[].expertise | array | Expertise selections | HIGH — verified |
 
 ---
 
 ## Skills Data Findings
 
-**Verdict:** NO — skills data is NOT present in any API response because NO API CALL EXISTS.
+**Verdict:** YES — skills data IS present in the API response.
 
-No skill-related keys found in any API response. There is no `variants[N]` structure in a
-backend JSON because there is no backend JSON at all. The planner is entirely client-side.
+Each variant contains three skill-related fields:
+1. **`skill`** — Object mapping numeric skill IDs to point allocations (e.g., `{"47": 3, "49": 3, "56": 5}`)
+2. **`skillOrder`** — Array defining the order skills were allocated (for replay in correct dependency order)
+3. **`equipSkills`** — Array of equipped active skills with `key` (skill identifier), `mods` (selected upgrades), and `rank`
 
-DOM investigation findings:
-- Skill node element type: `div`
-- CSS class pattern: `"skill-node"` (with possible additional classes for active/inactive state)
-- data-* attributes observed:
-  - `data-skill-id="Falling Star"` — skill identifier string
-  - `data-rank="1"` — current allocated rank
-  - `data-upgrades="Enhanced,Freefall"` — comma-separated list of selected upgrade nodes
-- Paragon node attributes observed:
-  - `data-coord="[x,y]"` — board coordinate as JSON array string
-  - `data-type="glyph"` — node category
-- JavaScript global state: `window.__NEXT_DATA__` was not investigated (DevTools Console step was
-  not performed), but the page structure (skill-node/paragon-node with data attributes) confirms
-  all build data is available in the DOM after page load.
-- Skill tree container: `<div class="skill-tree">` inside `<div class="planner-container">`
-- Paragon board container: `<div class="paragon-board">` inside `<div class="planner-container">`
-
-Example DOM structure (from live inspection of bd=1QMw):
-```html
-<div class="planner-container">
-  <div class="skill-tree">
-    <div class="skill-node" data-skill-id="Falling Star" data-rank="1" data-upgrades="Enhanced,Freefall">
-      <span class="skill-name">Paladin Falling Star</span>
-    </div>
-    <!-- additional skill-node elements -->
-  </div>
-  <div class="paragon-board">
-    <div class="paragon-node" data-coord="[x,y]" data-type="glyph">...</div>
-    <!-- additional paragon-node elements -->
-  </div>
-</div>
+**Example from bd=1qHh (Druid):**
+```json
+{
+  "equipSkills": [
+    {"key": "druid_wolves", "mods": ["Brutal Wolf Pack", "Enhanced Wolf Pack"], "rank": 5},
+    {"key": "druid_hurricane", "mods": ["Savage Hurricane", "Enhanced Hurricane"], "rank": 1},
+    {"key": "druid_debilitating_roar", "mods": ["Innate Debilitating Roar", "Enhanced Debilitating Roar"], "rank": 3},
+    {"key": "druid_petrify", "mods": ["Prime Petrify", "Supreme Petrify"], "rank": 1},
+    {"key": "druid_maul", "mods": ["Enhanced Maul"], "rank": 1},
+    {"key": "druid_shred", "mods": ["Enhanced Shred"], "rank": 1}
+  ]
+}
 ```
+
+**Note:** The `skill` object uses numeric IDs that correspond to d2core's internal skill database. The `equipSkills` array uses human-readable `key` identifiers. Both are needed: `skill` for total point allocations, `equipSkills` for the 6 active skill bar slots with upgrade paths.
 
 ---
 
@@ -127,81 +172,60 @@ Example DOM structure (from live inspection of bd=1QMw):
 
 ### Vector 1: bd=1QMw
 
-- Build title: Paladin Falling Star (from visible DOM text)
+- Build title: 【琉璃】S12圣骑士开荒构筑分享
 - Class: Paladin
-- Variants count: unknown (DOM inspection only; structure not fully enumerated)
+- Variants count: 4
 - Investigation date: 2026-03-16
 
-Page loaded successfully. Skills rendered in DOM.
+API call verified: 200 OK, 63KB response.
 
-Raw response: NOT APPLICABLE — client-side SPA, no API JSON response.
-
-DOM observation:
 ```
-skill-node: data-skill-id="Falling Star", data-rank="1", data-upgrades="Enhanced,Freefall"
-Rendered text: "Paladin Falling Star" (class label + skill name)
+Skills: 44 skill allocations in variant 0
+EquipSkills: active skill bar data with mods
+Paragon: 5 boards with full node data
 ```
 
 ### Vector 2: bd=1qHh
 
-- Build title: Druid build (from visible DOM text)
+- Build title: S6_德鲁伊_Tankzh_同伴_狼群BD_深坑112层通关
 - Class: Druid
-- Variants count: unknown (DOM inspection only; structure not fully enumerated)
+- Variants count: 1+
 - Investigation date: 2026-03-16
 
-Page loaded successfully. Skills rendered in DOM.
+API call verified: 200 OK.
 
-Raw response: NOT APPLICABLE — client-side SPA, no API JSON response.
-
-DOM observation:
 ```
-skill-node elements present with data-skill-id, data-rank attributes
-window.__NEXT_DATA__: not found (confirmed via console inspection)
+Skills: 45 skill allocations in variant 0
+EquipSkills: 6 equipped skills (wolves, hurricane, debilitating_roar, petrify, maul, shred)
+Paragon: 5 boards with full node data
 ```
-
-Note: Replaces original bd=2p6t which showed 404-like behavior (expired/invalid build ID).
 
 ---
 
 ## Architecture Rationale
 
-**Decision:** dom-fallback
+**Decision:** direct-http
 
-Skills data is NOT present in any `function-planner-queryplan` response because no such
-response exists. The `bd=` parameter is decoded entirely by client-side JavaScript in the
-browser. The `variants[N]` JSON structure with `gear` and `paragon` keys was assumed based
-on prior research/hypotheses but was NOT confirmed by live capture — there is no backend
-JSON at all.
+Skills data, paragon data, and all build information is fully available via a direct HTTP POST to the
+Tencent CloudBase API. No authentication token is required for read operations. The request format
+is simple JSON with double-serialized `request_data`.
 
-Phase 3 must use one of:
-1. **Option A: Reverse-engineer the bd= encoding** — Analyze the client-side JavaScript to
-   understand the encoding algorithm for the `bd=` parameter (likely base64 or a custom
-   URL-safe encoding). If reversible, this allows direct decoding in Rust without a browser,
-   yielding the lightest possible implementation. Risk: encoding may be obfuscated or use
-   internal game data tables.
+**Phase 3 approach:** Direct HTTP with `reqwest` + `serde_json`
+1. Extract `bd=` value from pasted URL
+2. POST to TCB endpoint with `function-planner-queryplan` function name
+3. Parse outer response → JSON.parse `response_data` → extract `data`
+4. Deserialize into typed Rust structs: `BuildPlan { char, variants: Vec<Variant> }`
+5. Each `Variant` contains `skill`, `skillOrder`, `equipSkills`, `paragon`, `gear`
 
-2. **Option B: Headless browser via `chromiumoxide` crate** — Load the planner URL in a
-   headless Chromium instance, wait for React/JS hydration, then extract skill node data
-   via CSS selectors:
-   - `.skill-node[data-skill-id]` — skill ID
-   - `.skill-node[data-rank]` — rank
-   - `.skill-node[data-upgrades]` — upgrades
-   - `.paragon-node[data-coord]` — paragon coordinates
-   - `.paragon-node[data-type]` — paragon node type
-   Adds ~150 MB shipping dependency (bundled Chromium).
+**Why NOT dom-fallback:** The original investigation incorrectly concluded no API exists. The Tencent
+CloudBase SDK uses a non-standard POST endpoint that was missed in the DevTools network tab. Now that
+the exact endpoint and request format are known and verified with live 200 OK responses, direct HTTP
+is dramatically simpler, faster (~50ms vs 2-5s), and produces typed JSON instead of fragile DOM scraping.
 
-3. **Option C: Both (hybrid)** — Attempt Option A (bd= decode) first; fall back to Option B
-   (headless browser) if decode fails or encoding changes.
+**Risk:** If d2core.com changes the TCB environment ID or rotates the appSecret, the direct HTTP approach
+breaks. Mitigation: the parser should detect non-200 responses and surface a clear "d2core API changed"
+error. The app credentials are public (embedded in the JS bundle) and can be re-extracted by fetching
+the main JS chunk.
 
-**Recommended Phase 3 approach:** Start with Option A (reverse-engineer bd= encoding).
-Inspect the minified JS bundles served by d2core.com (especially the planner page's main
-chunk) for a `decode` or `fromBase64` function operating on the `bd` URL param. If the
-encoding is a standard base64 + zlib/lz-string pattern (common in React SPA planners),
-this can be implemented in Rust with no binary dependency. If encoding is opaque/obfuscated,
-fall back to Option B (`chromiumoxide`).
-
-**Evidence:** Live DevTools network capture for bd=1QMw showed zero POST/XHR/Fetch requests
-to any backend endpoint after full page load. Only the initial HTML GET request was observed.
-All build data (Paladin Falling Star, rank 1, upgrades Enhanced/Freefall) was rendered from
-client-side JavaScript decoding of the `bd=` parameter value, confirmed by DOM inspection of
-`.skill-node` elements with populated `data-*` attributes.
+**Evidence:** Live curl calls to the TCB endpoint returned 200 OK with complete build data including
+skills, paragon, gear, and all metadata for both test vectors (bd=1QMw Paladin, bd=1qHh Druid).
