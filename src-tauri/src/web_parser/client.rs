@@ -19,6 +19,12 @@ pub struct D2CoreClient {
     env: String,
 }
 
+impl Default for D2CoreClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl D2CoreClient {
     /// Create a new client with hardcoded TCB constants.
     pub fn new() -> Self {

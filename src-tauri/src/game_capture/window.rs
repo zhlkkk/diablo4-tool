@@ -9,7 +9,6 @@ use windows::Win32::Graphics::Gdi::{
 #[cfg(windows)]
 use windows::Win32::UI::WindowsAndMessaging::{
     EnumWindows, FindWindowW, GetWindowLongW, GetWindowRect, GetWindowTextW, IsWindow, GWL_STYLE,
-    WS_CAPTION, WS_POPUP, WS_THICKFRAME,
 };
 
 use super::error::CaptureError;
@@ -39,7 +38,7 @@ pub fn find_diablo_window() -> Result<HWND, CaptureError> {
     let class_name: Vec<u16> = "D3 Main Window Class\0".encode_utf16().collect();
     let hwnd = unsafe { FindWindowW(PCWSTR(class_name.as_ptr()), PCWSTR::null()) };
 
-    if hwnd.0 != std::ptr::null_mut() {
+    if !hwnd.0.is_null() {
         return Ok(hwnd);
     }
 
@@ -50,23 +49,7 @@ pub fn find_diablo_window() -> Result<HWND, CaptureError> {
 /// Enumerate all top-level windows and find one whose title matches the target.
 #[cfg(windows)]
 fn find_by_title(target_title: &str) -> Result<HWND, CaptureError> {
-    use std::sync::Mutex;
-
-    let found: Mutex<Option<HWND>> = Mutex::new(None);
-    let target: Vec<u16> = target_title.encode_utf16().collect();
-
-    unsafe {
-        let _ = EnumWindows(
-            Some(enum_windows_callback),
-            LPARAM(&found as *const _ as isize),
-        );
-    }
-
-    // The callback above doesn't have access to `target` easily through LPARAM,
-    // so we use a different approach: pass a struct via LPARAM.
-    // Re-implement with a proper context struct.
-    let result = find_by_title_impl(target_title)?;
-    Ok(result)
+    find_by_title_impl(target_title)
 }
 
 #[cfg(windows)]
@@ -90,12 +73,6 @@ fn find_by_title_impl(target_title: &str) -> Result<HWND, CaptureError> {
     }
 
     ctx.found.ok_or(CaptureError::WindowNotFound)
-}
-
-#[cfg(windows)]
-unsafe extern "system" fn enum_windows_callback(_hwnd: HWND, _lparam: LPARAM) -> BOOL {
-    // Unused — replaced by enum_windows_proc
-    BOOL(1)
 }
 
 #[cfg(windows)]
