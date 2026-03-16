@@ -1,2 +1,6 @@
-// Game capture module — implemented in Plan 02
-// Finds D4 window, detects resolution, handles DPI, captures screenshots
+// Game capture module — finds D4 window, detects resolution, handles DPI, captures screenshots
+
+pub mod error;
+pub mod window;
+
+pub use error::CaptureError;
