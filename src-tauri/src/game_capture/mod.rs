@@ -2,5 +2,6 @@
 
 pub mod error;
 pub mod window;
+pub mod dpi;
 
 pub use error::CaptureError;
