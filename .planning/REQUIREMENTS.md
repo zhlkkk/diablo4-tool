@@ -42,12 +42,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Auto Applier
 
-- [ ] **APPLY-01**: App applies skill allocations to character via resolution-adaptive UI click automation
-- [ ] **APPLY-02**: App applies paragon board choices via resolution-adaptive UI click automation
+- [x] **APPLY-01**: App applies skill allocations to character via resolution-adaptive UI click automation
+- [x] **APPLY-02**: App applies paragon board choices via resolution-adaptive UI click automation
 - [x] **APPLY-03**: Click coordinates adapt correctly to detected game resolution
 - [x] **APPLY-04**: Click automation includes humanization (coordinate jitter, timing variation) to avoid detection
-- [ ] **APPLY-05**: App shows real-time progress of apply operation (which skill/node is being applied)
-- [ ] **APPLY-06**: App can pause and resume the apply process
+- [x] **APPLY-05**: App shows real-time progress of apply operation (which skill/node is being applied)
+- [x] **APPLY-06**: App can pause and resume the apply process
 - [x] **APPLY-07**: Unit tests verify coordinate mapping calculations for multiple resolutions
 
 ### GUI
@@ -115,12 +115,12 @@ Requirements for initial release. Each maps to roadmap phases.
 | PARSE-05 | Phase 3 — Web Parser | Complete |
 | PARSE-06 | Phase 3 — Web Parser | Complete — 03-01 |
 | PARSE-07 | Phase 3 — Web Parser | Complete |
-| APPLY-01 | Phase 4 — Auto Applier | Pending |
-| APPLY-02 | Phase 4 — Auto Applier | Pending |
+| APPLY-01 | Phase 4 — Auto Applier | Complete |
+| APPLY-02 | Phase 4 — Auto Applier | Complete |
 | APPLY-03 | Phase 4 — Auto Applier | Complete |
 | APPLY-04 | Phase 4 — Auto Applier | Complete |
-| APPLY-05 | Phase 4 — Auto Applier | Pending |
-| APPLY-06 | Phase 4 — Auto Applier | Pending |
+| APPLY-05 | Phase 4 — Auto Applier | Complete |
+| APPLY-06 | Phase 4 — Auto Applier | Complete |
 | APPLY-07 | Phase 4 — Auto Applier | Complete |
 | GUI-01 | Phase 5 — GUI + Integration | Pending |
 | GUI-02 | Phase 5 — GUI + Integration | Pending |
