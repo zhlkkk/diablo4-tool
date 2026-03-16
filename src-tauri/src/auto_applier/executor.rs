@@ -42,7 +42,7 @@ pub fn build_step_sequence(variant: &Variant, _res: &Resolution, cal: &Calibrati
     let order: Vec<u32> = if !variant.skill_order.is_empty() {
         variant.skill_order.clone()
     } else {
-        let mut keys: Vec<u32> = variant.skill.keys().cloned().collect();
+        let mut keys: Vec<u32> = variant.skill.keys().copied().collect();
         keys.sort();
         keys
     };

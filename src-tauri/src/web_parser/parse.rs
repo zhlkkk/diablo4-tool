@@ -111,7 +111,7 @@ fn parse_variant(v: &Value, build_id: &str) -> Result<Variant, ParserError> {
         .as_array()
         .map(|arr| {
             arr.iter()
-                .map(|es| parse_equip_skill(es))
+                .map(parse_equip_skill)
                 .collect::<Vec<_>>()
         })
         .unwrap_or_default();

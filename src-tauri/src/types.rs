@@ -105,14 +105,20 @@ pub struct AppState {
     pub cancel_flag: Arc<AtomicBool>,
 }
 
-impl AppState {
-    pub fn new() -> Self {
+impl Default for AppState {
+    fn default() -> Self {
         Self {
             game_state: None,
             build_plan: None,
             apply_phase: ApplyPhase::Idle,
             cancel_flag: Arc::new(AtomicBool::new(false)),
         }
+    }
+}
+
+impl AppState {
+    pub fn new() -> Self {
+        Self::default()
     }
 }
 

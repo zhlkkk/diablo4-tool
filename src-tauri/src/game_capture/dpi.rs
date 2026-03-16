@@ -8,9 +8,6 @@ use windows::Win32::UI::WindowsAndMessaging::GetClientRect;
 #[cfg(windows)]
 use super::error::CaptureError;
 
-#[cfg(windows)]
-use crate::types::Resolution;
-
 /// Get client area dimensions of the game window.
 #[cfg(windows)]
 pub fn get_game_resolution(hwnd: HWND) -> Result<(u32, u32), CaptureError> {
