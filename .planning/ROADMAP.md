@@ -80,7 +80,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Pure foundations: coords.rs, humanize.rs, error.rs, Cargo.toml deps, unit tests
+- [x] 04-01-PLAN.md — Pure foundations: coords.rs, humanize.rs, error.rs, Cargo.toml deps, unit tests — COMPLETE 2026-03-16
 - [ ] 04-02-PLAN.md — Executor loop, step sequencer, safety integration, Tauri command wiring
 
 ### Phase 5: GUI + Integration
@@ -105,5 +105,5 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
 | 3. Web Parser | 3/3 | Complete   | 2026-03-16 |
-| 4. Auto Applier | 0/2 | Planning complete | - |
+| 4. Auto Applier | 1/2 | In progress | - |
 | 5. GUI + Integration | 0/? | Not started | - |

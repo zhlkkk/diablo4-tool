@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Phase 4 context gathered
-last_updated: "2026-03-16T12:33:09.629Z"
-last_activity: 2026-03-16 — Phase 3 complete, transitioning to Phase 4
+last_updated: "2026-03-16T13:00:16Z"
+last_activity: 2026-03-16 — Phase 4 Plan 01 complete (auto-applier foundations)
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 8
-  completed_plans: 8
-  percent: 60
+  total_plans: 10
+  completed_plans: 9
+  percent: 68
 ---
 
 # Project State
@@ -26,18 +26,18 @@ See: .planning/PROJECT.md (updated 2026-03-16)
 ## Current Position
 
 Phase: 4 of 5 (Auto Applier)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-03-16 — Phase 3 complete, transitioning to Phase 4
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-03-16 — Phase 4 Plan 01 complete (auto-applier foundations)
 
-Progress: [██████░░░░] 60%
+Progress: [███████░░░] 68%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: ~8 min
-- Total execution time: 0.65 hours
+- Total plans completed: 6
+- Average duration: ~7 min
+- Total execution time: 0.68 hours
 
 **By Phase:**
 
@@ -84,6 +84,9 @@ Recent decisions affecting current work:
 - [03-03]: vite-env.d.ts required for CSS imports under noUncheckedSideEffectImports (TypeScript 5.6+) — standard Vite file missing from scaffold
 - [03-03]: React state split into error (API errors) and validation (client-side) for different error sources
 - [03-03]: Skill names displayed as raw API keys in preview — name mapping deferred to Phase 5
+- [04-01]: scale_factor uses 2560.0/1920.0 exact fraction for 1440p — matches pixel-perfect coordinate math
+- [04-01]: jitter_coord uses magnitude [2,5] + random sign (not gen_range(-5..=5)) — enforces minimum 2px offset, never 0 or 1px
+- [04-01]: All coordinate constants marked PLACEHOLDER — empirical measurement required before ship
 
 ### Pending Todos
 
@@ -96,6 +99,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T12:33:09.627Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-auto-applier/04-CONTEXT.md
+Last session: 2026-03-16T13:00:16Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: .planning/phases/04-auto-applier/04-02-PLAN.md
