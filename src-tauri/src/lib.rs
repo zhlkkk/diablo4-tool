@@ -104,6 +104,47 @@ async fn parse_build_link(
     Ok(build_plan)
 }
 
+/// Tauri command: Start automation — applies the loaded BuildPlan to the game character.
+/// Reads build_plan from AppState, then delegates to executor::run().
+#[tauri::command]
+async fn start_apply(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, Mutex<AppState>>,
+) -> Result<String, String> {
+    let plan = {
+        let s = state.lock().unwrap();
+        s.build_plan
+            .clone()
+            .ok_or_else(|| "No build plan loaded".to_string())?
+    };
+    // state.inner() returns &Mutex<AppState> — matches run() signature directly
+    auto_applier::executor::run(plan, app, state.inner())
+        .await
+        .map(|_| "Apply complete".to_string())
+        .map_err(|e| e.to_string())
+}
+
+/// Tauri command: Pause ongoing automation.
+/// Sets cancel flag and saves current step index for resume.
+#[tauri::command]
+fn pause_apply(state: tauri::State<'_, Mutex<AppState>>) {
+    auto_applier::executor::pause(state.inner());
+}
+
+/// Tauri command: Resume automation from the saved pause point.
+/// Clears cancel flag and re-runs the executor from the saved step.
+#[tauri::command]
+async fn resume_apply(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, Mutex<AppState>>,
+) -> Result<String, String> {
+    // resume() accepts &Mutex<AppState> via state.inner()
+    auto_applier::executor::resume(app, state.inner())
+        .await
+        .map(|_| "Resume complete".to_string())
+        .map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app_state = AppState::new();
@@ -116,6 +157,9 @@ pub fn run() {
             check_safety,
             reset_emergency_stop,
             parse_build_link,
+            start_apply,
+            pause_apply,
+            resume_apply,
         ])
         .setup(move |app| {
             // Register F10 emergency stop hotkey
