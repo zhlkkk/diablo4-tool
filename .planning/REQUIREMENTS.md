@@ -35,7 +35,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **CAPT-01**: App detects whether Diablo IV process is running and finds the game window handle
 - [ ] **CAPT-02**: App detects the current game resolution from the window
-- [ ] **CAPT-03**: App handles DPI scaling correctly (Per-Monitor DPI Aware v2 manifest, GetDpiForWindow normalization)
+- [x] **CAPT-03**: App handles DPI scaling correctly (Per-Monitor DPI Aware v2 manifest, GetDpiForWindow normalization)
 - [ ] **CAPT-04**: App detects if game is in exclusive fullscreen and warns user to switch to borderless windowed
 - [ ] **CAPT-05**: App can capture a screenshot of the game window for state detection
 - [ ] **CAPT-06**: Unit tests verify resolution detection and DPI normalization logic
@@ -104,7 +104,7 @@ Requirements for initial release. Each maps to roadmap phases.
 | SAFE-06 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | CAPT-01 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | CAPT-02 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
-| CAPT-03 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| CAPT-03 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | CAPT-04 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | CAPT-05 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
 | CAPT-06 | Phase 2 — Scaffold + Safety + Game Capture | Pending |

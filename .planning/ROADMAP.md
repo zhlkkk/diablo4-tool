@@ -46,7 +46,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Tauri v2 scaffold with React template, shared types, DPI manifest, module stubs
+- [x] 02-01-PLAN.md — Tauri v2 scaffold with React template, shared types, DPI manifest, module stubs — COMPLETE 2026-03-16
 - [ ] 02-02-PLAN.md — Game capture module: window finding, DPI/resolution, screenshot capture
 - [ ] 02-03-PLAN.md — Safety module: pixel sampling detector, gate function, event emission
 - [ ] 02-04-PLAN.md — Tauri wiring: F10 emergency stop hotkey, commands, integration
@@ -94,7 +94,7 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
-| 2. Scaffold + Safety + Game Capture | 0/4 | Not started | - |
+| 2. Scaffold + Safety + Game Capture | 1/4 | In progress | - |
 | 3. Web Parser | 0/? | Not started | - |
 | 4. Auto Applier | 0/? | Not started | - |
 | 5. GUI + Integration | 0/? | Not started | - |

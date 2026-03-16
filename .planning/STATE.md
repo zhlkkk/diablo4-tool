@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-16T10:25:05.186Z"
-last_activity: 2026-03-16 — Phase 1 Plan 01 (API spike) complete
+status: in-progress
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-16T11:00:44Z"
+last_activity: 2026-03-16 — Phase 2 Plan 01 (scaffold) complete
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
-  percent: 10
+  total_plans: 2
+  completed_plans: 2
+  percent: 20
 ---
 
 # Project State
@@ -21,33 +21,34 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is in a safe UI state.
-**Current focus:** Phase 1 — Research Spike (plan 01 complete)
+**Current focus:** Phase 2 — Scaffold, Safety, Game Capture (plan 01 of 4 complete)
 
 ## Current Position
 
-Phase: 1 of 5 (Research Spike)
-Plan: 1 of 1 in current phase (COMPLETE)
-Status: Phase 1 complete — ready for Phase 2
-Last activity: 2026-03-16 — Phase 1 Plan 01 (API spike) complete
+Phase: 2 of 5 (Scaffold, Safety, Game Capture)
+Plan: 2 of 4 in current phase
+Status: Plan 02-01 complete — ready for Plan 02-02
+Last activity: 2026-03-16 — Phase 2 Plan 01 (scaffold) complete
 
-Progress: [█░░░░░░░░░] 10%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: ~20 min
-- Total execution time: 0.33 hours
+- Total plans completed: 2
+- Average duration: ~12 min
+- Total execution time: 0.40 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-research-spike | 1 | ~20 min | ~20 min |
+| 02-scaffold-safety-game-capture | 1 | ~4 min | ~4 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~20 min)
-- Trend: —
+- Last 5 plans: 01-01 (~20 min), 02-01 (~4 min)
+- Trend: accelerating
 
 *Updated after each plan completion*
 
@@ -64,6 +65,8 @@ Recent decisions affecting current work:
 - [01-01]: ARCHITECTURE_DECISION=dom-fallback — d2core.com has no backend API; bd= parameter decoded client-side by JavaScript
 - [01-01]: Phase 3 primary approach: attempt bd= reverse-engineering in Rust before committing to chromiumoxide headless browser (~150 MB dependency)
 - [01-01]: DOM selectors confirmed: .skill-node[data-skill-id/rank/upgrades] and .paragon-node[data-coord/type] for Phase 3 scraping
+- [02-01]: Tauri v2 default DPI handling sufficient — no manual manifest needed
+- [02-01]: AppState managed via std::sync::Mutex with Arc<AtomicBool> cancel flag
 
 ### Pending Todos
 
@@ -76,6 +79,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T10:25:05.180Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-scaffold-safety-game-capture/02-CONTEXT.md
+Last session: 2026-03-16T11:00:44Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: .planning/phases/02-scaffold-safety-game-capture/02-01-SUMMARY.md
