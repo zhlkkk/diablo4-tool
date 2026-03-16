@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Research Spike** - Empirically verify d2core.com API skills data availability before any parser code is written — COMPLETE 2026-03-16
 - [ ] **Phase 2: Scaffold + Safety + Game Capture** - Project skeleton, corrected safety invariant, and game window capture module
-- [ ] **Phase 3: Web Parser** - d2core link parsing and BuildPlan extraction, informed by Phase 1 findings
+- [x] **Phase 3: Web Parser** - d2core link parsing and BuildPlan extraction, informed by Phase 1 findings (completed 2026-03-16)
 - [ ] **Phase 4: Auto Applier** - Resolution-adaptive skill and paragon click automation with humanization and safety re-checks
 - [ ] **Phase 5: GUI + Integration** - Frontend interface, build preview, controls, and end-to-end wiring
 
@@ -87,7 +87,7 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Research Spike | 1/1 | Complete | 2026-03-16 |
+| 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
 | 2. Scaffold + Safety + Game Capture | 0/? | Not started | - |
 | 3. Web Parser | 0/? | Not started | - |
 | 4. Auto Applier | 0/? | Not started | - |
