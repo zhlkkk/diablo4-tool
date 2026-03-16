@@ -329,8 +329,22 @@ pub async fn resume(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::{EquipSkill, ParagonBoard, Resolution, Variant};
+    use crate::types::{CalibrationData, CalibrationPoint, EquipSkill, ParagonBoard, Resolution, Variant};
     use std::collections::HashMap;
+
+    fn test_calibration() -> CalibrationData {
+        CalibrationData {
+            resolution_width: 1920,
+            resolution_height: 1080,
+            skill_allocate_button: CalibrationPoint { x: 960, y: 800 },
+            skill_panel_origin: CalibrationPoint { x: 400, y: 200 },
+            skill_grid_spacing: 80,
+            paragon_center: CalibrationPoint { x: 960, y: 540 },
+            paragon_node_spacing: 40,
+            paragon_nav_next: CalibrationPoint { x: 1700, y: 540 },
+            paragon_nav_prev: CalibrationPoint { x: 220, y: 540 },
+        }
+    }
 
     fn empty_variant() -> Variant {
         Variant {
@@ -356,7 +370,7 @@ mod tests {
             glyph: None,
         });
 
-        let steps = build_step_sequence(&variant, &Resolution::Res1080p);
+        let steps = build_step_sequence(&variant, &Resolution::Res1080p, &test_calibration());
 
         // Should have 2 skill steps + 1 paragon step = 3 total
         assert_eq!(steps.len(), 3, "Expected 3 steps, got {}", steps.len());
@@ -393,7 +407,7 @@ mod tests {
         variant.skill.insert(2, 1);
         variant.skill_order = vec![2, 1];
 
-        let steps = build_step_sequence(&variant, &Resolution::Res1080p);
+        let steps = build_step_sequence(&variant, &Resolution::Res1080p, &test_calibration());
 
         assert_eq!(steps.len(), 2, "Expected 2 steps");
         assert!(
@@ -411,7 +425,7 @@ mod tests {
     #[test]
     fn test_step_sequence_empty_variant() {
         let variant = empty_variant();
-        let steps = build_step_sequence(&variant, &Resolution::Res1080p);
+        let steps = build_step_sequence(&variant, &Resolution::Res1080p, &test_calibration());
         assert!(steps.is_empty(), "Empty variant should produce no steps");
     }
 
@@ -424,7 +438,7 @@ mod tests {
         v1.skill.insert(99, 2);
 
         // Build steps for variant index 1 (v1 with skill 99, rank 2)
-        let steps = build_step_sequence(&v1, &Resolution::Res1080p);
+        let steps = build_step_sequence(&v1, &Resolution::Res1080p, &test_calibration());
         assert_eq!(steps.len(), 2, "Variant 1 should produce 2 steps for skill 99 rank 2");
         assert!(steps[0].label.contains("Skill 99"), "Steps should reference skill 99, got: {}", steps[0].label);
     }
@@ -440,7 +454,7 @@ mod tests {
             rank: 0,
         });
 
-        let steps = build_step_sequence(&variant, &Resolution::Res1080p);
+        let steps = build_step_sequence(&variant, &Resolution::Res1080p, &test_calibration());
 
         assert_eq!(steps.len(), 2, "Expected 2 steps");
         assert!(

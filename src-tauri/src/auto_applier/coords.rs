@@ -117,4 +117,25 @@ mod tests {
         let pt = ParagonBoardCoords::CENTER;
         assert!(pt.x > 0 && pt.y > 0, "PARAGON CENTER should have non-zero coords");
     }
+
+    #[test]
+    fn test_scale_from_calibration_same_resolution() {
+        // Calibrated at 1080p, target 1080p — should be identity
+        assert_eq!(scale_from_calibration(960, 540, 1920, &Resolution::Res1080p), (960, 540));
+    }
+
+    #[test]
+    fn test_scale_from_calibration_1080p_to_1440p() {
+        // Calibrated at 1080p, target 1440p — should scale up
+        let (x, y) = scale_from_calibration(960, 540, 1920, &Resolution::Res1440p);
+        assert_eq!((x, y), (1280, 720));
+    }
+
+    #[test]
+    fn test_scale_from_calibration_1440p_to_1080p() {
+        // Calibrated at 1440p (2560 wide), target 1080p
+        // 1280 at 2560 -> normalize to 1080p: 1280 * (1920/2560) = 960
+        let (x, y) = scale_from_calibration(1280, 720, 2560, &Resolution::Res1080p);
+        assert_eq!((x, y), (960, 540));
+    }
 }
