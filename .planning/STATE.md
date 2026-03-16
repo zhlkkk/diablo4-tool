@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-03-16T11:08:33Z"
-last_activity: 2026-03-16 — Phase 2 Plan 02 (game capture) + Plan 03 (safety) complete
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-03-16T11:23:32Z"
+last_activity: 2026-03-16 — Phase 2 complete (all 4 plans done)
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
-  percent: 40
+  completed_phases: 2
+  total_plans: 5
+  completed_plans: 5
+  percent: 50
 ---
 
 # Project State
@@ -21,34 +21,34 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is in a safe UI state.
-**Current focus:** Phase 2 — Scaffold, Safety, Game Capture (plans 01-03 of 4 complete)
+**Current focus:** Phase 2 complete — ready for Phase 3 (Web Parser)
 
 ## Current Position
 
-Phase: 2 of 5 (Scaffold, Safety, Game Capture)
-Plan: 4 of 4 in current phase
-Status: Plan 02-03 complete — ready for Plan 02-04
-Last activity: 2026-03-16 — Phase 2 Plan 03 (safety module) complete
+Phase: 2 of 5 (Scaffold, Safety, Game Capture) -- COMPLETE
+Plan: 4 of 4 in current phase (all done)
+Status: Phase 2 complete — ready for Phase 3
+Last activity: 2026-03-16 — Phase 2 Plan 04 (Tauri wiring) complete
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: ~8 min
-- Total execution time: 0.52 hours
+- Total execution time: 0.65 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-research-spike | 1 | ~20 min | ~20 min |
-| 02-scaffold-safety-game-capture | 3 | ~11 min | ~3.7 min |
+| 02-scaffold-safety-game-capture | 4 | ~19 min | ~4.8 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (~20 min), 02-01 (~4 min), 02-02 (~4 min), 02-03 (~3 min)
-- Trend: accelerating
+- Last 5 plans: 02-01 (~4 min), 02-02 (~4 min), 02-03 (~3 min), 02-04 (~8 min)
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -71,6 +71,8 @@ Recent decisions affecting current work:
 - [02-02]: Used cfg(windows) guards on all Win32 code — enables compilation and testing on Linux/WSL
 - [02-03]: Safety gate checks emergency stop flag before pixel state for fail-fast behavior
 - [02-03]: Pure function detector pattern — no Win32 dependency, takes raw pixel buffer
+- [02-04]: cfg(windows)/cfg(not(windows)) guards on Tauri commands for cross-platform compilation
+- [02-04]: Thin command pattern — Tauri commands delegate to module functions, no business logic in handlers
 
 ### Pending Todos
 
@@ -83,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T11:08:12Z
-Stopped at: Completed 02-03-PLAN.md
-Resume file: .planning/phases/02-scaffold-safety-game-capture/02-03-SUMMARY.md
+Last session: 2026-03-16T11:23:32Z
+Stopped at: Completed 02-04-PLAN.md
+Resume file: .planning/phases/02-scaffold-safety-game-capture/02-04-SUMMARY.md

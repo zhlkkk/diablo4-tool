@@ -27,7 +27,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **SAFE-01**: Safety module detects whether Diablo IV is in a safe UI state for automation (character select, skill tree screen, paragon board screen)
 - [x] **SAFE-02**: Safety module refuses to start automation if game is not in a recognized safe state
 - [x] **SAFE-03**: Safety module re-checks game state before each click step (not just once at start)
-- [ ] **SAFE-04**: Safety module provides immediate emergency stop (hotkey or button) that halts all automation
+- [x] **SAFE-04**: Safety module provides immediate emergency stop (hotkey or button) that halts all automation
 - [x] **SAFE-05**: Safety module logs all automation decisions (start, stop, state checks) for user transparency
 - [x] **SAFE-06**: Unit tests verify safety module correctly identifies safe vs unsafe states
 
@@ -99,7 +99,7 @@ Requirements for initial release. Each maps to roadmap phases.
 | SAFE-01 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | SAFE-02 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | SAFE-03 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
-| SAFE-04 | Phase 2 — Scaffold + Safety + Game Capture | Pending |
+| SAFE-04 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | SAFE-05 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | SAFE-06 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | CAPT-01 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
@@ -136,4 +136,4 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 after Phase 1 Plan 01 completion (SPIKE-01, SPIKE-02 complete)*
+*Last updated: 2026-03-16 after Phase 2 Plan 04 completion (SAFE-04 complete, Phase 2 fully done)*
