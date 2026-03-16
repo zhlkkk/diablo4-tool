@@ -59,6 +59,11 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **GUI-05**: User sees clear error messages for all failure states (game not found, bad link, unsafe state)
 - [x] **GUI-06**: App window stays responsive during long-running automation operations — async executor confirmed 2026-03-16 (05-01)
 
+### CI/CD
+
+- [ ] **CI-01**: Every push to main and every PR triggers automated checks: frontend type-check (tsc), Rust clippy lint, and cargo unit tests
+- [ ] **CI-02**: Tagged releases (v*) produce a draft GitHub Release with Windows NSIS installer built by tauri-action
+
 ## v2 Requirements
 
 ### Enhanced Parsing
@@ -128,12 +133,14 @@ Requirements for initial release. Each maps to roadmap phases.
 | GUI-04 | Phase 5 — GUI + Integration | Complete |
 | GUI-05 | Phase 5 — GUI + Integration | Complete |
 | GUI-06 | Phase 5 — GUI + Integration | Complete — 05-01 (async executor confirmed) |
+| CI-01 | Phase 6 — GitHub CI/CD | Planned |
+| CI-02 | Phase 6 — GitHub CI/CD | Planned |
 
 **Coverage:**
-- v1 requirements: 34 total
-- Mapped to phases: 34
-- Unmapped: 0 ✓
+- v1 requirements: 36 total
+- Mapped to phases: 36
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 after Phase 5 Plan 01 completion (GUI-03 and GUI-06 backend commands complete)*
+*Last updated: 2026-03-16 after Phase 6 planning (CI-01, CI-02 added)*
