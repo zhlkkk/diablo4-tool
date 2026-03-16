@@ -77,7 +77,11 @@ Plans:
   3. Click coordinates are correct for at minimum 1080p, 1440p, and 4K resolutions (verified by coordinate mapping unit tests)
   4. All click events include coordinate jitter and timing variation so they do not carry the synthetic-input signature
   5. User can stop the apply process at any time and the automation halts within one click step
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Pure foundations: coords.rs, humanize.rs, error.rs, Cargo.toml deps, unit tests
+- [ ] 04-02-PLAN.md — Executor loop, step sequencer, safety integration, Tauri command wiring
 
 ### Phase 5: GUI + Integration
 **Goal**: Complete frontend UI connects all backend modules into a single end-to-end user flow: paste link → preview build → start automation → monitor progress → stop if needed
@@ -101,5 +105,5 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
 | 3. Web Parser | 3/3 | Complete   | 2026-03-16 |
-| 4. Auto Applier | 0/? | Not started | - |
+| 4. Auto Applier | 0/2 | Planning complete | - |
 | 5. GUI + Integration | 0/? | Not started | - |
