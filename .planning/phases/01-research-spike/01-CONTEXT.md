@@ -1,41 +1,34 @@
 # Phase 1: Research Spike - Context
 
 **Gathered:** 2026-03-16
-**Status:** Ready for planning
+**Status:** Complete (REVISED after JS bundle analysis)
 
 <domain>
 ## Phase Boundary
 
-Empirically verify whether d2core.com's API includes skill allocation data alongside paragon data, and document the exact API endpoint, request format, and response JSON schema. No production code is written in this phase — output is a spike document that gates the web_parser architecture in Phase 3.
+Empirically verify whether d2core.com's API includes skill allocation data alongside paragon data, and document the exact API endpoint, request format, and response JSON schema.
 
 </domain>
 
 <decisions>
 ## Implementation Decisions
 
-### API investigation method
-- Use browser DevTools network inspection on d2core.com/d4/planner pages
-- Inspect the `function-planner-queryplan` Cloud Function call (identified by Diablo4Companion source code)
-- Capture full request headers, URL pattern, and response JSON
-- Test with multiple known build IDs (bd= values) to confirm schema consistency
+### API Discovery (REVISED)
+- d2core.com uses **Tencent CloudBase** (腾讯云开发), NOT Firebase
+- API endpoint: `https://diablocore-4gkv4qjs9c6a0b40.ap-shanghai.tcb-api.tencentcloudapi.com/web`
+- Function: `function-planner-queryplan` with params `{bd, enableVariant: true}`
+- **Skills ARE in the API response** — `variants[].skill` (numeric ID → points) + `variants[].equipSkills` (equipped skills with mods)
+- No auth token required for read operations
+- Original DevTools investigation was incorrect — the TCB SDK endpoint was missed
 
-### Skills data fallback strategy
-- If d2core API response includes skills data: use direct HTTP API call (simplest path)
-- If d2core API does NOT include skills data: fall back to scraping the planner page DOM for skill node elements
-- If DOM scraping needed: document the CSS selectors and DOM structure for skill nodes
-- Record which approach is needed so Phase 3 can architect accordingly (direct HTTP vs headless browser/DOM parsing)
-
-### Spike output format
-- Structured markdown document in the phase directory
-- Must include: exact API endpoint URL, required request headers, full JSON response example
-- Must include: typed schema definition showing all fields (paragon nodes, gear, and skills if present)
-- Must include: architecture decision — "direct HTTP" or "DOM fallback" with rationale
-- Must include: at least 2 sample bd= values with their decoded responses for test vectors
+### Architecture Decision: direct-http (REVISED from dom-fallback)
+- Direct HTTP POST with `reqwest` — verified with live 200 OK responses
+- ~50ms latency, typed JSON, zero browser dependency
+- Design spec: `docs/superpowers/specs/2026-03-16-web-parser-design.md`
 
 ### Claude's Discretion
-- Which specific bd= build IDs to test with
-- How many sample builds are sufficient to confirm schema stability
-- Whether to include curl commands or just document the endpoint
+- Which specific bd= build IDs to use for additional testing
+- Whether to include curl commands in documentation
 
 </decisions>
 
@@ -44,13 +37,13 @@ Empirically verify whether d2core.com's API includes skill allocation data along
 
 **Downstream agents MUST read these before planning or implementing.**
 
-### d2core API structure
-- `.planning/research/FEATURES.md` — Documents d2core API structure findings from Diablo4Companion source code (D2CoreBuildDataVariantJson entity)
-- `.planning/research/STACK.md` — Stack recommendations including base64/flate2 for potential encoding
-- `.planning/research/ARCHITECTURE.md` — Module dependency chain showing web_parser feeds into all downstream phases
+### API details
+- `.planning/phases/01-research-spike/SPIKE-FINDINGS.md` — Verified TCB API endpoint, request format, full response schema, test vectors
+- `docs/superpowers/specs/2026-03-16-web-parser-design.md` — Full web_parser module design: data structures, error handling, testing strategy
 
-### Research summary
-- `.planning/research/SUMMARY.md` — Synthesized findings across all research dimensions, including the skills data gap flagged as P1 blocker
+### Research
+- `.planning/research/STACK.md` — Rust crate recommendations (reqwest, serde, etc.)
+- `.planning/research/ARCHITECTURE.md` — Module architecture and dependency chain
 
 </canonical_refs>
 
@@ -58,23 +51,25 @@ Empirically verify whether d2core.com's API includes skill allocation data along
 ## Existing Code Insights
 
 ### Reusable Assets
-- None — greenfield project, no code exists yet
+- None — greenfield project
 
 ### Established Patterns
-- None — this is Phase 1
+- None — Phase 1
 
 ### Integration Points
-- Spike output directly informs Phase 3 (web_parser) architecture decisions
-- Test vectors from this spike become the pinned test data for PARSE-07
+- SPIKE-FINDINGS.md feeds Phase 3 (web_parser) architecture
+- Test vectors (bd=1QMw, bd=1qHh) become pinned test fixtures for PARSE-07
+- Design spec defines Rust data structures for all downstream modules
 
 </code_context>
 
 <specifics>
 ## Specific Ideas
 
-- Diablo4Companion (C# open source project) already reverse-engineered the d2core API for gear and paragon — its source code is a reference for the endpoint pattern
-- The `function-planner-queryplan` Cloud Function name and `web?env=diablocore` URL pattern are known from that project
-- Research found that bd= is a short build ID (database key), NOT encoded build data — the API returns the actual build JSON
+- Tencent CloudBase JS SDK source code reveals the exact `callFunction` protocol
+- Public app credentials in JS bundle: env=diablocore-4gkv4qjs9c6a0b40
+- Response uses double-serialization: `response_data` is a JSON string inside JSON
+- Glyph field in paragon is an object `{"0": "name"}`, needs custom deserialization
 
 </specifics>
 
@@ -88,4 +83,4 @@ None — discussion stayed within phase scope
 ---
 
 *Phase: 01-research-spike*
-*Context gathered: 2026-03-16*
+*Context gathered: 2026-03-16 (revised after JS bundle analysis)*
