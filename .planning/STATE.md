@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-03-16T12:13:37Z"
-last_activity: 2026-03-16 — Phase 3 Plan 01 (web_parser module) complete
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-03-16T12:24:00Z"
+last_activity: 2026-03-16 — Phase 3 Plan 03 (React frontend UI) complete
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 8
-  completed_plans: 6
-  percent: 55
+  completed_plans: 8
+  percent: 75
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is in a safe UI state.
-**Current focus:** Phase 3 Plan 01 complete — web_parser module implemented, ready for Phase 3 Plan 02 (frontend URL input)
+**Current focus:** Phase 3 complete — web_parser module, pinned test fixtures, and React frontend UI all done. Ready for Phase 4 (auto-applier).
 
 ## Current Position
 
 Phase: 3 of 5 (Web Parser)
-Plan: 1 of 3 in current phase (1 done)
-Status: Phase 3 in progress — Plan 01 complete, ready for Plan 02
-Last activity: 2026-03-16 — Phase 3 Plan 01 (web_parser module) complete
+Plan: 3 of 3 in current phase (all done)
+Status: Phase 3 complete — all 3 plans finished
+Last activity: 2026-03-16 — Phase 3 Plan 03 (React frontend UI) complete
 
-Progress: [██████░░░░] 55%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
@@ -45,10 +45,10 @@ Progress: [██████░░░░] 55%
 |-------|-------|-------|----------|
 | 01-research-spike | 1 | ~20 min | ~20 min |
 | 02-scaffold-safety-game-capture | 4 | ~19 min | ~4.8 min |
-| 03-web-parser | 1 | ~3 min | ~3 min |
+| 03-web-parser | 3 | ~16 min | ~5.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (~4 min), 02-03 (~3 min), 02-04 (~8 min), 03-01 (~3 min)
+- Last 5 plans: 02-04 (~8 min), 03-01 (~3 min), 03-02 (~6 min), 03-03 (~7 min)
 - Trend: stable, fast
 
 *Updated after each plan completion*
@@ -78,6 +78,9 @@ Recent decisions affecting current work:
 - [03-01]: request_data is double-serialized (JSON string inside JSON) — required by TCB SDK wire format
 - [03-01]: ParserError messages are Chinese-only (target users) — technical detail via debug format
 - [03-01]: No cfg(windows) guards on web_parser — pure HTTP, works cross-platform
+- [03-03]: vite-env.d.ts required for CSS imports under noUncheckedSideEffectImports (TypeScript 5.6+) — standard Vite file missing from scaffold
+- [03-03]: React state split into error (API errors) and validation (client-side) for different error sources
+- [03-03]: Skill names displayed as raw API keys in preview — name mapping deferred to Phase 5
 
 ### Pending Todos
 
@@ -90,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T12:13:37Z
-Stopped at: Completed 03-01-PLAN.md
-Resume file: .planning/phases/03-web-parser/03-02-PLAN.md
+Last session: 2026-03-16T12:24:00Z
+Stopped at: Completed 03-03-PLAN.md
+Resume file: .planning/phases/04-auto-applier/04-01-PLAN.md
