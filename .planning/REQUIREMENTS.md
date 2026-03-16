@@ -14,12 +14,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Web Parser
 
-- [ ] **PARSE-01**: User can paste a d2core.com/d4/planner?bd=XXXX link and the app extracts the build ID
-- [ ] **PARSE-02**: App calls d2core.com API with the build ID and retrieves the full build JSON response
-- [ ] **PARSE-03**: App parses paragon board data (board names, node coordinates, glyphs, rotation) from API response into a typed BuildPlan
-- [ ] **PARSE-04**: App parses skill allocation data from API response into the BuildPlan (SPIKE-01 confirmed: skills available in API)
+- [x] **PARSE-01**: User can paste a d2core.com/d4/planner?bd=XXXX link and the app extracts the build ID
+- [x] **PARSE-02**: App calls d2core.com API with the build ID and retrieves the full build JSON response
+- [x] **PARSE-03**: App parses paragon board data (board names, node coordinates, glyphs, rotation) from API response into a typed BuildPlan
+- [x] **PARSE-04**: App parses skill allocation data from API response into the BuildPlan (SPIKE-01 confirmed: skills available in API)
 - [ ] **PARSE-05**: App displays a human-readable build preview (skills + paragon) in the GUI before any automation
-- [ ] **PARSE-06**: Parser handles invalid/expired build IDs with clear error messages
+- [x] **PARSE-06**: Parser handles invalid/expired build IDs with clear error messages
 - [ ] **PARSE-07**: Parser has pinned test vectors for known-good builds with unit tests
 
 ### Safety Module
@@ -108,12 +108,12 @@ Requirements for initial release. Each maps to roadmap phases.
 | CAPT-04 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | CAPT-05 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
 | CAPT-06 | Phase 2 — Scaffold + Safety + Game Capture | Complete |
-| PARSE-01 | Phase 3 — Web Parser | Pending |
-| PARSE-02 | Phase 3 — Web Parser | Pending |
-| PARSE-03 | Phase 3 — Web Parser | Pending |
-| PARSE-04 | Phase 3 — Web Parser | Pending |
+| PARSE-01 | Phase 3 — Web Parser | Complete — 03-01 |
+| PARSE-02 | Phase 3 — Web Parser | Complete — 03-01 |
+| PARSE-03 | Phase 3 — Web Parser | Complete — 03-01 |
+| PARSE-04 | Phase 3 — Web Parser | Complete — 03-01 |
 | PARSE-05 | Phase 3 — Web Parser | Pending |
-| PARSE-06 | Phase 3 — Web Parser | Pending |
+| PARSE-06 | Phase 3 — Web Parser | Complete — 03-01 |
 | PARSE-07 | Phase 3 — Web Parser | Pending |
 | APPLY-01 | Phase 4 — Auto Applier | Pending |
 | APPLY-02 | Phase 4 — Auto Applier | Pending |

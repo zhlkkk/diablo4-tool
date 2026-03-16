@@ -63,7 +63,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — web_parser Rust module: D2CoreClient, extract/parse functions, error types, Tauri command
+- [x] 03-01-PLAN.md — web_parser Rust module: D2CoreClient, extract/parse functions, error types, Tauri command — COMPLETE 2026-03-16
 - [ ] 03-02-PLAN.md — Pinned test fixtures and unit tests for web_parser
 - [ ] 03-03-PLAN.md — Frontend React UI: link input, build preview card, dark theme
 
@@ -100,6 +100,6 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 |-------|----------------|--------|-----------|
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
-| 3. Web Parser | 0/3 | In Progress | - |
+| 3. Web Parser | 1/3 | In Progress | - |
 | 4. Auto Applier | 0/? | Not started | - |
 | 5. GUI + Integration | 0/? | Not started | - |

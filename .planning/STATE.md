@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 3 UI-SPEC approved
-last_updated: "2026-03-16T11:46:17.762Z"
-last_activity: 2026-03-16 — Phase 2 Plan 04 (Tauri wiring) complete
+status: in-progress
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-03-16T12:13:37Z"
+last_activity: 2026-03-16 — Phase 3 Plan 01 (web_parser module) complete
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
-  percent: 50
+  total_plans: 8
+  completed_plans: 6
+  percent: 55
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-16)
 
 **Core value:** Automatically apply a planned build to a Diablo IV character from a single pasted link — safely, without memory reading, and only when the game is in a safe UI state.
-**Current focus:** Phase 2 complete — ready for Phase 3 (Web Parser)
+**Current focus:** Phase 3 Plan 01 complete — web_parser module implemented, ready for Phase 3 Plan 02 (frontend URL input)
 
 ## Current Position
 
-Phase: 2 of 5 (Scaffold, Safety, Game Capture) -- COMPLETE
-Plan: 4 of 4 in current phase (all done)
-Status: Phase 2 complete — ready for Phase 3
-Last activity: 2026-03-16 — Phase 2 Plan 04 (Tauri wiring) complete
+Phase: 3 of 5 (Web Parser)
+Plan: 1 of 3 in current phase (1 done)
+Status: Phase 3 in progress — Plan 01 complete, ready for Plan 02
+Last activity: 2026-03-16 — Phase 3 Plan 01 (web_parser module) complete
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 55%
 
 ## Performance Metrics
 
@@ -45,10 +45,11 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 01-research-spike | 1 | ~20 min | ~20 min |
 | 02-scaffold-safety-game-capture | 4 | ~19 min | ~4.8 min |
+| 03-web-parser | 1 | ~3 min | ~3 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (~4 min), 02-02 (~4 min), 02-03 (~3 min), 02-04 (~8 min)
-- Trend: stable
+- Last 5 plans: 02-02 (~4 min), 02-03 (~3 min), 02-04 (~8 min), 03-01 (~3 min)
+- Trend: stable, fast
 
 *Updated after each plan completion*
 
@@ -73,6 +74,10 @@ Recent decisions affecting current work:
 - [02-03]: Pure function detector pattern — no Win32 dependency, takes raw pixel buffer
 - [02-04]: cfg(windows)/cfg(not(windows)) guards on Tauri commands for cross-platform compilation
 - [02-04]: Thin command pattern — Tauri commands delegate to module functions, no business logic in handlers
+- [03-01]: D2CoreClient hardcodes TCB endpoint and env ID — matches d2core.com JS bundle, no auth token needed for reads
+- [03-01]: request_data is double-serialized (JSON string inside JSON) — required by TCB SDK wire format
+- [03-01]: ParserError messages are Chinese-only (target users) — technical detail via debug format
+- [03-01]: No cfg(windows) guards on web_parser — pure HTTP, works cross-platform
 
 ### Pending Todos
 
@@ -80,11 +85,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- RESOLVED (Phase 1): d2core.com API does not include skill allocation data — no API exists at all; bd= is client-side decoded. Architecture decision: dom-fallback.
+- RESOLVED (Phase 1, now superseded by 03-01): d2core.com direct TCB API confirmed — skills data IS present; dom-fallback decision from Phase 1 was based on incorrect DevTools investigation. Direct HTTP approach implemented in Phase 3.
 - RISK (Phase 4): Exact paragon board UI pixel coordinates across resolutions are unknown — requires empirical measurement with the game running at each target resolution.
 
 ## Session Continuity
 
-Last session: 2026-03-16T11:46:17.755Z
-Stopped at: Phase 3 UI-SPEC approved
-Resume file: .planning/phases/03-web-parser/03-UI-SPEC.md
+Last session: 2026-03-16T12:13:37Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: .planning/phases/03-web-parser/03-02-PLAN.md
