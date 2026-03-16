@@ -84,7 +84,7 @@ Plans:
 - [ ] 04-02-PLAN.md — Executor loop, step sequencer, safety integration, Tauri command wiring
 
 ### Phase 5: GUI + Integration
-**Goal**: Complete frontend UI connects all backend modules into a single end-to-end user flow: paste link → preview build → start automation → monitor progress → stop if needed
+**Goal**: Complete frontend UI connects all backend modules into a single end-to-end user flow: paste link → preview build → select variant → start automation → monitor progress → calibrate coordinates → stop if needed
 **Depends on**: Phase 2, Phase 3, Phase 4
 **Requirements**: GUI-01, GUI-02, GUI-03, GUI-04, GUI-05, GUI-06
 **Success Criteria** (what must be TRUE):
@@ -92,7 +92,12 @@ Plans:
   2. User sees real-time per-step progress (which skill or paragon node is currently being applied) during automation
   3. User sees clear, specific error messages for every failure state: game not found, invalid link, unsafe game state
   4. The app window remains interactive (scrollable, clickable) while a long-running automation sequence is running in the background
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Backend: CalibrationData type, calibration I/O commands, screenshot capture, variant_index support
+- [ ] 05-02-PLAN.md — Frontend: variant selector, apply controls, progress bar, event listeners, bilingual errors
+- [ ] 05-03-PLAN.md — Calibration wizard UI and human verification of complete flow
 
 ## Progress
 
@@ -106,4 +111,4 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
 | 3. Web Parser | 3/3 | Complete   | 2026-03-16 |
 | 4. Auto Applier | 2/2 | Complete   | 2026-03-16 |
-| 5. GUI + Integration | 0/? | Not started | - |
+| 5. GUI + Integration | 0/3 | Not started | - |
