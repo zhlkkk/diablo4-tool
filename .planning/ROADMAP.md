@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Research Spike** - Empirically verify d2core.com API skills data availability before any parser code is written — COMPLETE 2026-03-16
 - [x] **Phase 2: Scaffold + Safety + Game Capture** - Project skeleton, corrected safety invariant, and game window capture module — COMPLETE 2026-03-16
-- [x] **Phase 3: Web Parser** - d2core link parsing and BuildPlan extraction, informed by Phase 1 findings (completed 2026-03-16)
+- [ ] **Phase 3: Web Parser** - d2core link parsing and BuildPlan extraction, informed by Phase 1 findings
 - [ ] **Phase 4: Auto Applier** - Resolution-adaptive skill and paragon click automation with humanization and safety re-checks
 - [ ] **Phase 5: GUI + Integration** - Frontend interface, build preview, controls, and end-to-end wiring
 
@@ -60,7 +60,12 @@ Plans:
   2. Parser unit tests against pinned bd= test vectors all pass, verifying known-good builds decode correctly
   3. Invalid or expired build links show a clear, specific error message (not a panic or generic failure)
   4. Paragon board data (board names, node coordinates, glyphs, rotation) is fully parsed into a typed BuildPlan struct
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — web_parser Rust module: D2CoreClient, extract/parse functions, error types, Tauri command
+- [ ] 03-02-PLAN.md — Pinned test fixtures and unit tests for web_parser
+- [ ] 03-03-PLAN.md — Frontend React UI: link input, build preview card, dark theme
 
 ### Phase 4: Auto Applier
 **Goal**: `auto_applier::executor::run()` applies a full BuildPlan to the character via resolution-adaptive, humanized click sequences with per-step safety re-checks, progress events, and cancel support
@@ -95,6 +100,6 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 |-------|----------------|--------|-----------|
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
 | 2. Scaffold + Safety + Game Capture | 4/4 | Complete | 2026-03-16 |
-| 3. Web Parser | 0/? | Not started | - |
+| 3. Web Parser | 0/3 | In Progress | - |
 | 4. Auto Applier | 0/? | Not started | - |
 | 5. GUI + Integration | 0/? | Not started | - |
