@@ -43,7 +43,13 @@ Plans:
   3. App detects the Diablo IV window handle, reads its resolution, and normalizes coordinates for DPI scaling at 100%, 125%, and 150% display scaling
   4. Emergency stop (hotkey or button) halts all automation immediately when triggered
   5. App warns the user and refuses to continue if the game is running in exclusive fullscreen
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Tauri v2 scaffold with React template, shared types, DPI manifest, module stubs
+- [ ] 02-02-PLAN.md — Game capture module: window finding, DPI/resolution, screenshot capture
+- [ ] 02-03-PLAN.md — Safety module: pixel sampling detector, gate function, event emission
+- [ ] 02-04-PLAN.md — Tauri wiring: F10 emergency stop hotkey, commands, integration
 
 ### Phase 3: Web Parser
 **Goal**: `web_parser::fetch_and_decode()` returns a typed `BuildPlan` from a pasted d2core.com link, with pinned test vectors, typed error variants, and full GUI preview of parsed build
@@ -88,7 +94,7 @@ Note: Phase 2 and Phase 3 can be worked in parallel once Phase 1 is complete (we
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Research Spike | 1/1 | Complete    | 2026-03-16 |
-| 2. Scaffold + Safety + Game Capture | 0/? | Not started | - |
+| 2. Scaffold + Safety + Game Capture | 0/4 | Not started | - |
 | 3. Web Parser | 0/? | Not started | - |
 | 4. Auto Applier | 0/? | Not started | - |
 | 5. GUI + Integration | 0/? | Not started | - |
