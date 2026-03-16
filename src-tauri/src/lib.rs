@@ -86,6 +86,24 @@ fn reset_emergency_stop(state: tauri::State<'_, Mutex<AppState>>) {
     s.cancel_flag.store(false, std::sync::atomic::Ordering::SeqCst);
 }
 
+/// Tauri command: Fetch and parse a d2core.com build link into a BuildPlan.
+/// Accepts a full URL (https://d2core.com/d4/planner?bd=1QMw) or raw ID (1QMw).
+/// Stores the result in AppState for use by the auto-applier.
+#[tauri::command]
+async fn parse_build_link(
+    url: String,
+    state: tauri::State<'_, Mutex<AppState>>,
+) -> Result<BuildPlan, String> {
+    let client = web_parser::D2CoreClient::new();
+    let build_plan = client.fetch_build(&url).await.map_err(|e| e.to_string())?;
+
+    // Store in AppState
+    let mut s = state.lock().unwrap();
+    s.build_plan = Some(build_plan.clone());
+
+    Ok(build_plan)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app_state = AppState::new();
@@ -97,6 +115,7 @@ pub fn run() {
             get_game_state,
             check_safety,
             reset_emergency_stop,
+            parse_build_link,
         ])
         .setup(move |app| {
             // Register F10 emergency stop hotkey
