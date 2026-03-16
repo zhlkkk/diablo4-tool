@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 05-gui-integration-05-03-PLAN.md
+stopped_at: Completed 05-gui-integration-05-04-PLAN.md
 last_updated: "2026-03-16T13:47:21.453Z"
 last_activity: 2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors)
 progress:
   total_phases: 5
   completed_phases: 5
-  total_plans: 13
-  completed_plans: 13
+  total_plans: 14
+  completed_plans: 14
   percent: 100
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-16)
 ## Current Position
 
 Phase: 5 of 5 (GUI Integration) — COMPLETE
-Plan: 3 of 3 complete
+Plan: 4 of 4 complete
 Status: All phases complete — v1.0 milestone reached
-Last activity: 2026-03-16 — Phase 5 Plan 03 complete (CalibrationWizard with guided click-to-mark flow)
+Last activity: 2026-03-16 — Phase 5 Plan 04 complete (CalibrationData wired into executor with scale_from_calibration)
 
 Progress: [██████████] 100%
 
@@ -47,10 +47,10 @@ Progress: [██████████] 100%
 | 02-scaffold-safety-game-capture | 4 | ~19 min | ~4.8 min |
 | 03-web-parser | 3 | ~16 min | ~5.3 min |
 | 04-auto-applier | 2 | ~8 min | ~4 min |
-| 05-gui-integration | 3 (of 3) | ~10 min | ~3.3 min |
+| 05-gui-integration | 4 (of 4) | ~13 min | ~3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (~4 min), 04-02 (~4 min), 05-01 (~8 min), 05-02 (~8 min), 05-03 (~2 min)
+- Last 5 plans: 04-02 (~4 min), 05-01 (~8 min), 05-02 (~8 min), 05-03 (~2 min), 05-04 (~3 min)
 - Trend: stable, fast
 
 *Updated after each plan completion*
@@ -98,6 +98,8 @@ Recent decisions affecting current work:
 - [05-02]: Calibration modal is a placeholder — showCalibration state reserved; full wizard deferred to Plan 03
 - [05-02]: Variant selector placed above build-card so changing variant updates both preview and the variantIndex passed to start_apply
 - [Phase 05-gui-integration]: Default skill_grid_spacing=80 and paragon_node_spacing=40 hardcoded in CalibrationWizard — spacing values require empirical measurement; wizard captures only 5 positional click points
+- [Phase 05-04]: scale_from_calibration normalizes to 1080p baseline first then scales to target — supports calibration at any resolution
+- [Phase 05-04]: PLACEHOLDER constants kept in coords.rs as documentation/fallback reference — executor no longer references them
 
 ### Pending Todos
 
@@ -111,5 +113,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-16T13:47:21.451Z
-Stopped at: Completed 05-gui-integration-05-03-PLAN.md
+Stopped at: Completed 05-gui-integration-05-04-PLAN.md
 Resume file: None
