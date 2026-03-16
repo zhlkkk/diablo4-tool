@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-stopped_at: "Phase 05 Plan 02 complete (frontend GUI controls, variant selector, progress bar)"
-last_updated: "2026-03-16T13:41:30Z"
-last_activity: "2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors, skill lookup)"
+status: completed
+stopped_at: Completed 05-gui-integration-05-03-PLAN.md
+last_updated: "2026-03-16T13:47:21.453Z"
+last_activity: 2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors)
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 13
-  completed_plans: 12
-  percent: 92
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-16)
 
 ## Current Position
 
-Phase: 5 of 5 (GUI Integration) — IN PROGRESS
-Plan: 2 of 3 complete
-Status: Phase 5 underway — backend commands and frontend GUI complete, calibration tool remaining
-Last activity: 2026-03-16 — Phase 5 Plan 02 complete (variant selector, apply controls, progress bar, event listeners, bilingual errors)
+Phase: 5 of 5 (GUI Integration) — COMPLETE
+Plan: 3 of 3 complete
+Status: All phases complete — v1.0 milestone reached
+Last activity: 2026-03-16 — Phase 5 Plan 03 complete (CalibrationWizard with guided click-to-mark flow)
 
-Progress: [█████████░] 92%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -47,10 +47,10 @@ Progress: [█████████░] 92%
 | 02-scaffold-safety-game-capture | 4 | ~19 min | ~4.8 min |
 | 03-web-parser | 3 | ~16 min | ~5.3 min |
 | 04-auto-applier | 2 | ~8 min | ~4 min |
-| 05-gui-integration | 1 (of 3) | ~8 min | ~8 min |
+| 05-gui-integration | 3 (of 3) | ~10 min | ~3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (~6 min), 03-03 (~7 min), 04-01 (~4 min), 04-02 (~4 min)
+- Last 5 plans: 04-01 (~4 min), 04-02 (~4 min), 05-01 (~8 min), 05-02 (~8 min), 05-03 (~2 min)
 - Trend: stable, fast
 
 *Updated after each plan completion*
@@ -97,6 +97,7 @@ Recent decisions affecting current work:
 - [05-02]: handleStop uses pause_apply then resets to Idle — no dedicated stop_apply command; pause sets cancel flag which halts automation
 - [05-02]: Calibration modal is a placeholder — showCalibration state reserved; full wizard deferred to Plan 03
 - [05-02]: Variant selector placed above build-card so changing variant updates both preview and the variantIndex passed to start_apply
+- [Phase 05-gui-integration]: Default skill_grid_spacing=80 and paragon_node_spacing=40 hardcoded in CalibrationWizard — spacing values require empirical measurement; wizard captures only 5 positional click points
 
 ### Pending Todos
 
@@ -109,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T13:41:30Z
-Stopped at: Phase 05 Plan 02 complete (frontend GUI controls, variant selector, progress bar)
-Resume file: .planning/phases/05-gui-integration/05-03-PLAN.md
+Last session: 2026-03-16T13:47:21.451Z
+Stopped at: Completed 05-gui-integration-05-03-PLAN.md
+Resume file: None
