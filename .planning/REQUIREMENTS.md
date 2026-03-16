@@ -54,10 +54,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **GUI-01**: User sees a clean interface to paste d2core build link
 - [ ] **GUI-02**: User sees parsed build preview (skills + paragon) before applying
-- [ ] **GUI-03**: User has start/stop/pause controls for the apply process
+- [x] **GUI-03**: User has start/stop/pause controls for the apply process — backend commands complete 2026-03-16 (05-01)
 - [ ] **GUI-04**: User sees real-time status and progress during automation
 - [ ] **GUI-05**: User sees clear error messages for all failure states (game not found, bad link, unsafe state)
-- [ ] **GUI-06**: App window stays responsive during long-running automation operations
+- [x] **GUI-06**: App window stays responsive during long-running automation operations — async executor confirmed 2026-03-16 (05-01)
 
 ## v2 Requirements
 
@@ -124,10 +124,10 @@ Requirements for initial release. Each maps to roadmap phases.
 | APPLY-07 | Phase 4 — Auto Applier | Complete |
 | GUI-01 | Phase 5 — GUI + Integration | Pending |
 | GUI-02 | Phase 5 — GUI + Integration | Pending |
-| GUI-03 | Phase 5 — GUI + Integration | Pending |
+| GUI-03 | Phase 5 — GUI + Integration | Complete — 05-01 (backend commands) |
 | GUI-04 | Phase 5 — GUI + Integration | Pending |
 | GUI-05 | Phase 5 — GUI + Integration | Pending |
-| GUI-06 | Phase 5 — GUI + Integration | Pending |
+| GUI-06 | Phase 5 — GUI + Integration | Complete — 05-01 (async executor confirmed) |
 
 **Coverage:**
 - v1 requirements: 34 total
@@ -136,4 +136,4 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 after Phase 2 Plan 04 completion (SAFE-04 complete, Phase 2 fully done)*
+*Last updated: 2026-03-16 after Phase 5 Plan 01 completion (GUI-03 and GUI-06 backend commands complete)*

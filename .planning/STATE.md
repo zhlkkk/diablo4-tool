@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 5 context gathered
-last_updated: "2026-03-16T13:16:43.367Z"
-last_activity: 2026-03-16 — Phase 4 Plan 02 complete (executor loop + Tauri commands)
+status: in_progress
+stopped_at: "Phase 05 Plan 01 complete (backend Rust commands for GUI integration)"
+last_updated: "2026-03-16T14:00:00.000Z"
+last_activity: "2026-03-16 — Phase 5 Plan 01 complete (CalibrationData, calibration I/O, screenshot, variant_index)"
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
-  percent: 100
+  total_plans: 13
+  completed_plans: 11
+  percent: 85
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-16)
 
 ## Current Position
 
-Phase: 4 of 5 (Auto Applier) — COMPLETE
-Plan: 2 of 2 complete
-Status: Phase complete, ready for Phase 5
-Last activity: 2026-03-16 — Phase 4 Plan 02 complete (executor loop + Tauri commands)
+Phase: 5 of 5 (GUI Integration) — IN PROGRESS
+Plan: 1 of 3 complete
+Status: Phase 5 underway — backend commands complete, frontend plans remaining
+Last activity: 2026-03-16 — Phase 5 Plan 01 complete (CalibrationData, calibration I/O, screenshot capture, variant_index)
 
-Progress: [██████████] 100%
+Progress: [████████░░] 85%
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Progress: [██████████] 100%
 | 02-scaffold-safety-game-capture | 4 | ~19 min | ~4.8 min |
 | 03-web-parser | 3 | ~16 min | ~5.3 min |
 | 04-auto-applier | 2 | ~8 min | ~4 min |
+| 05-gui-integration | 1 (of 3) | ~8 min | ~8 min |
 
 **Recent Trend:**
 - Last 5 plans: 03-02 (~6 min), 03-03 (~7 min), 04-01 (~4 min), 04-02 (~4 min)
@@ -90,6 +91,9 @@ Recent decisions affecting current work:
 - [04-01]: All coordinate constants marked PLACEHOLDER — empirical measurement required before ship
 - [Phase 04-02]: run() accepts &Mutex<AppState> (not Arc-wrapped) — state.inner() return type matches directly
 - [Phase 04-02]: resume() re-calls run() which reads apply_phase from state and detects Paused state to skip completed steps
+- [05-01]: CalibrationPoint is a separate serde-compatible type from auto_applier::coords::Point2D (Copy-only, not Serialize)
+- [05-01]: resume() passes variant_index=0 for v1 simplicity — user cannot change variant mid-apply
+- [05-01]: BGRA-to-RGBA channel swap inline before image encoding (BitBlt returns BGRA on Windows)
 
 ### Pending Todos
 
@@ -102,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-16T13:16:43.365Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-gui-integration/05-CONTEXT.md
+Last session: 2026-03-16T14:00:00.000Z
+Stopped at: Phase 05 Plan 01 complete (backend Rust commands for GUI integration)
+Resume file: .planning/phases/05-gui-integration/05-02-PLAN.md
