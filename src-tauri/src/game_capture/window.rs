@@ -1,7 +1,7 @@
 #[cfg(windows)]
 use windows::core::PCWSTR;
 #[cfg(windows)]
-use windows::Win32::Foundation::{BOOL, HWND, LPARAM, RECT};
+use windows::Win32::Foundation::{HWND, LPARAM, RECT};
 #[cfg(windows)]
 use windows::Win32::Graphics::Gdi::{
     GetMonitorInfoW, MonitorFromWindow, MONITORINFO, MONITOR_DEFAULTTONEAREST,
@@ -36,9 +36,7 @@ pub fn check_fullscreen_style(style: u32, win_rect: [i32; 4], monitor_rect: [i32
 pub fn find_diablo_window() -> Result<HWND, CaptureError> {
     // Try FindWindowW with the known D3 class name first
     let class_name: Vec<u16> = "D3 Main Window Class\0".encode_utf16().collect();
-    let hwnd = unsafe { FindWindowW(PCWSTR(class_name.as_ptr()), PCWSTR::null()) };
-
-    if !hwnd.0.is_null() {
+    if let Ok(hwnd) = unsafe { FindWindowW(PCWSTR(class_name.as_ptr()), PCWSTR::null()) } {
         return Ok(hwnd);
     }
 
@@ -76,7 +74,7 @@ fn find_by_title_impl(target_title: &str) -> Result<HWND, CaptureError> {
 }
 
 #[cfg(windows)]
-unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL {
+unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> windows::core::BOOL {
     let ctx = &mut *(lparam.0 as *mut EnumContext);
     let mut title_buf = [0u16; 256];
     let len = GetWindowTextW(hwnd, &mut title_buf);
@@ -84,10 +82,10 @@ unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL 
         let title: Vec<u16> = title_buf[..len as usize].to_vec();
         if title == ctx.target_title {
             ctx.found = Some(hwnd);
-            return BOOL(0); // Stop enumeration
+            return windows::core::BOOL(0); // Stop enumeration
         }
     }
-    BOOL(1) // Continue
+    windows::core::BOOL(1) // Continue
 }
 
 /// Check if the given window is in exclusive fullscreen mode.
@@ -123,7 +121,7 @@ pub fn is_exclusive_fullscreen(hwnd: HWND) -> bool {
 /// Check if a window handle is still valid (not stale after game restart).
 #[cfg(windows)]
 pub fn is_window_valid(hwnd: HWND) -> bool {
-    unsafe { IsWindow(hwnd).as_bool() }
+    unsafe { IsWindow(Some(hwnd)).as_bool() }
 }
 
 #[cfg(test)]
