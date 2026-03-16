@@ -100,6 +100,7 @@ pub enum ApplyPhase {
 
 pub struct AppState {
     pub game_state: Option<GameState>,
+    pub build_plan: Option<BuildPlan>,
     pub apply_phase: ApplyPhase,
     pub cancel_flag: Arc<AtomicBool>,
 }
@@ -108,6 +109,7 @@ impl AppState {
     pub fn new() -> Self {
         Self {
             game_state: None,
+            build_plan: None,
             apply_phase: ApplyPhase::Idle,
             cancel_flag: Arc::new(AtomicBool::new(false)),
         }
