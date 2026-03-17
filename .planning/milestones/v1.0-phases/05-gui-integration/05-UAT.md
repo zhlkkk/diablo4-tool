@@ -1,5 +1,5 @@
 ---
-status: complete
+status: resolved
 phase: 05-gui-integration
 source: 05-01-SUMMARY.md, 05-02-SUMMARY.md, 05-03-SUMMARY.md, 05-04-SUMMARY.md
 started: 2026-03-17T08:00:00Z
@@ -62,9 +62,16 @@ skipped: 0
 ## Gaps
 
 - truth: "Calibration wizard completes all 5 steps and saves calibration data"
-  status: failed
+  status: resolved
   reason: "User reported: 第4步定位完成后只能返回或取消，无法继续到第5步（流程卡住）。第4步说明不明确，不清楚具体点击位置。"
   severity: major
   test: 5
-  artifacts: []
-  missing: []
+  root_cause: "Wizard captures one screenshot (skill tree) at start but steps 3-5 need paragon board screenshot. User sees skill tree screenshot while asked to identify paragon elements — cannot meaningfully click. Also step descriptions unclear."
+  artifacts:
+    - path: "src/App.tsx"
+      issue: "No recapture mechanism between skill tree and paragon phases; vague step descriptions"
+  missing:
+    - "Recapture prompt between step 2 and step 3 for paragon board screenshot"
+    - "Recapture button available at any step"
+    - "Clearer Chinese descriptions specifying click targets"
+  fix_commit: "70f9008"
