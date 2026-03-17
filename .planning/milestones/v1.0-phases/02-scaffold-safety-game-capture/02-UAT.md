@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 02-scaffold-safety-game-capture
 source: 02-01-SUMMARY.md, 02-02-SUMMARY.md, 02-03-SUMMARY.md, 02-04-SUMMARY.md
 started: 2026-03-17T00:00:00Z
@@ -58,5 +58,12 @@ skipped: 0
   reason: "User reported: 点击校准坐标时，无法检测到diablo4 进程"
   severity: major
   test: 4
-  artifacts: []
-  missing: []
+  root_cause: "find_diablo_window() uses wrong window class 'D3 Main Window Class' (Diablo III, not IV) and fallback uses exact title match 'Diablo IV' which fails for Chinese client (暗黑破坏神IV)"
+  artifacts:
+    - path: "src-tauri/src/game_capture/window.rs"
+      issue: "Wrong D3 class name at line 39; exact title match at line 84"
+  missing:
+    - "Correct D4 window class name (likely 'D4 Main Window Class' — needs user verification)"
+    - "Substring/contains title matching instead of exact equality"
+    - "Support for localized titles (暗黑破坏神)"
+  debug_session: ".planning/debug/d4-window-detection-fail.md"
