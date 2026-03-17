@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nickelpack/tauri-v2-schema/main/config.schema.json",
   "productName": "Diablo4 Build Applier",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "identifier": "com.diablo4tool.app",
   "build": {
     "beforeDevCommand": "npm run dev",
