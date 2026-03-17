@@ -4,5 +4,3 @@ pub mod error;
 pub mod window;
 pub mod dpi;
 pub mod screenshot;
-
-pub use error::CaptureError;

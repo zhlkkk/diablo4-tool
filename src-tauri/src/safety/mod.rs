@@ -4,7 +4,7 @@ pub mod detector;
 pub mod error;
 pub mod hotkey;
 
-pub use detector::{detect_safe_state, get_pixel, SamplePoint};
+pub use detector::detect_safe_state;
 pub use error::SafetyError;
 
 use crate::types::SafetyState;
