@@ -11,6 +11,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
     EnumWindows, FindWindowW, GetWindowLongW, GetWindowRect, GetWindowTextW, IsWindow, GWL_STYLE,
 };
 
+#[cfg(windows)]
 use super::error::CaptureError;
 
 /// Pure logic for checking whether window style bits indicate exclusive fullscreen.
@@ -120,6 +121,7 @@ pub fn is_exclusive_fullscreen(hwnd: HWND) -> bool {
 
 /// Check if a window handle is still valid (not stale after game restart).
 #[cfg(windows)]
+#[allow(dead_code)]
 pub fn is_window_valid(hwnd: HWND) -> bool {
     unsafe { IsWindow(Some(hwnd)).as_bool() }
 }

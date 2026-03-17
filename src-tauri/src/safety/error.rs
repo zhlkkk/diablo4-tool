@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 #[derive(Debug, Error)]
+#[allow(dead_code)]
 pub enum SafetyError {
     #[error("Game is not in a safe UI state: {reason}")]
     UnsafeState { reason: String },

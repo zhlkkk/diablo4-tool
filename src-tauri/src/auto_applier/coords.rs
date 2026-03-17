@@ -1,6 +1,7 @@
 use crate::types::Resolution;
 
 #[derive(Debug, Clone, Copy)]
+#[allow(dead_code)]
 pub struct Point2D {
     pub x: u32,
     pub y: u32,
@@ -22,8 +23,10 @@ pub fn scale_coord(x: u32, y: u32, res: &Resolution) -> (u32, u32) {
 }
 
 /// Skill tree UI coordinate constants (1080p reference, requires empirical measurement).
+#[allow(dead_code)]
 pub struct SkillTreeCoords;
 
+#[allow(dead_code)]
 impl SkillTreeCoords {
     /// PLACEHOLDER: requires empirical measurement at 1080p
     pub const ALLOCATE_BUTTON: Point2D = Point2D { x: 960, y: 800 };
@@ -46,8 +49,10 @@ pub fn scale_from_calibration(x: u32, y: u32, calibration_width: u32, target_res
 }
 
 /// Paragon board UI coordinate constants (1080p reference, requires empirical measurement).
+#[allow(dead_code)]
 pub struct ParagonBoardCoords;
 
+#[allow(dead_code)]
 impl ParagonBoardCoords {
     /// PLACEHOLDER: requires empirical measurement at 1080p
     pub const CENTER: Point2D = Point2D { x: 960, y: 540 };

@@ -1,6 +1,7 @@
 use thiserror::Error;
 
 #[derive(Debug, Error)]
+#[allow(dead_code)]
 pub enum CaptureError {
     #[error("Diablo IV window not found — is the game running?")]
     WindowNotFound,

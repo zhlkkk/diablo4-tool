@@ -27,6 +27,7 @@ pub fn get_game_dpi(hwnd: HWND) -> u32 {
 
 /// Normalize a logical coordinate to physical pixels for the game window's DPI.
 /// Formula: physical_px = logical_px * dpi / 96
+#[allow(dead_code)]
 pub fn normalize_coord(logical: u32, game_dpi: u32) -> u32 {
     (logical as f64 * game_dpi as f64 / 96.0).round() as u32
 }

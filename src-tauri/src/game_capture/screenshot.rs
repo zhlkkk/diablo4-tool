@@ -50,7 +50,7 @@ pub fn capture_window(hwnd: HWND, width: u32, height: u32) -> Result<Vec<u8>, Ca
         // Cleanup GDI objects
         SelectObject(hdc_mem, old_bm);
         let _ = DeleteObject(hbm.into());
-        DeleteDC(hdc_mem);
+        let _ = DeleteDC(hdc_mem);
         ReleaseDC(Some(hwnd), hdc_window);
 
         if success.as_bool() {

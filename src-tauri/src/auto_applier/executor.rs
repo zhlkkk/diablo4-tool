@@ -131,7 +131,7 @@ pub async fn click_at(_x: u32, _y: u32) -> Result<(), ApplyError> {
 pub fn bring_window_foreground(hwnd: windows::Win32::Foundation::HWND) -> Result<(), ApplyError> {
     use windows::Win32::UI::WindowsAndMessaging::SetForegroundWindow;
     unsafe {
-        SetForegroundWindow(hwnd);
+        let _ = SetForegroundWindow(hwnd);
     }
     Ok(())
 }
