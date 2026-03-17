@@ -58,12 +58,15 @@ interface CalibrationStep {
   description: string;
 }
 
+/** Phase 1: skill tree screenshot (steps 0-1), Phase 2: paragon board screenshot (steps 2-4) */
+const PARAGON_PHASE_START = 2;
+
 const CALIBRATION_STEPS: CalibrationStep[] = [
-  { key: "skill_allocate_button", label: "技能分配按钮 / Skill Allocate Button", description: "点击游戏中技能分配按钮的位置 / Click the skill allocate button position" },
-  { key: "skill_panel_origin", label: "技能面板起点 / Skill Panel Origin", description: "点击第一个技能槽的左上角 / Click the top-left of the first skill slot" },
-  { key: "paragon_center", label: "传奇天赋中心 / Paragon Board Center", description: "点击传奇天赋面板的中心点 / Click the center of the paragon board" },
-  { key: "paragon_nav_next", label: "下一面板按钮 / Next Board Button", description: "点击切换到下一块传奇天赋面板的按钮 / Click the next paragon board navigation button" },
-  { key: "paragon_nav_prev", label: "上一面板按钮 / Previous Board Button", description: "点击切换到上一块传奇天赋面板的按钮 / Click the previous paragon board navigation button" },
+  { key: "skill_allocate_button", label: "技能分配按钮 / Skill Allocate Button", description: "请在截图上点击「技能分配」按钮的位置（技能树底部的分配按钮）\nClick the skill allocate button at the bottom of the skill tree" },
+  { key: "skill_panel_origin", label: "技能面板起点 / Skill Panel Origin", description: "请在截图上点击第一个技能槽的左上角位置\nClick the top-left corner of the first skill slot" },
+  { key: "paragon_center", label: "巅峰天赋中心 / Paragon Board Center", description: "请在截图上点击巅峰天赋面板的中心节点位置\nClick the center node of the paragon board" },
+  { key: "paragon_nav_next", label: "下一面板按钮 / Next Board Button", description: "请在截图上点击巅峰天赋面板右侧的「下一面板」箭头按钮\nClick the right-side arrow button to navigate to the next paragon board" },
+  { key: "paragon_nav_prev", label: "上一面板按钮 / Previous Board Button", description: "请在截图上点击巅峰天赋面板左侧的「上一面板」箭头按钮\nClick the left-side arrow button to navigate to the previous paragon board" },
 ];
 
 function CalibrationWizard({ onComplete, onCancel }: {
@@ -76,6 +79,7 @@ function CalibrationWizard({ onComplete, onCancel }: {
   const [currentStep, setCurrentStep] = useState(0);
   const [points, setPoints] = useState<Record<string, { x: number; y: number }>>({});
   const [captureError, setCaptureError] = useState<string | null>(null);
+  const [needsRecapture, setNeedsRecapture] = useState(false);
 
   const captureScreenshot = async () => {
     setCaptureError(null);
@@ -109,7 +113,12 @@ function CalibrationWizard({ onComplete, onCancel }: {
     setPoints(newPoints);
 
     if (currentStep < CALIBRATION_STEPS.length - 1) {
-      setCurrentStep(currentStep + 1);
+      const nextStep = currentStep + 1;
+      // If transitioning from skill tree phase to paragon phase, prompt recapture
+      if (nextStep === PARAGON_PHASE_START) {
+        setNeedsRecapture(true);
+      }
+      setCurrentStep(nextStep);
     } else {
       // All points captured — build CalibrationData and save
       const data: CalibrationData = {
@@ -127,6 +136,12 @@ function CalibrationWizard({ onComplete, onCancel }: {
     }
   };
 
+  // Recapture handler for paragon phase transition
+  const handleRecapture = async () => {
+    await captureScreenshot();
+    setNeedsRecapture(false);
+  };
+
   if (!screenshot) {
     return (
       <div className="calibration-wizard">
@@ -140,6 +155,29 @@ function CalibrationWizard({ onComplete, onCancel }: {
         <div className="calibration-actions">
           <button className="btn-primary" onClick={captureScreenshot}>
             截取游戏画面 / Capture Screenshot
+          </button>
+          <button className="btn-secondary" onClick={onCancel}>
+            取消 / Cancel
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show recapture prompt when transitioning to paragon phase
+  if (needsRecapture) {
+    return (
+      <div className="calibration-wizard">
+        <h2>校准向导 / Calibration Wizard</h2>
+        <p className="calibration-desc">
+          技能树校准完成！请在游戏中切换到「巅峰天赋」面板，然后点击下方按钮重新截图。
+          <br />
+          Skill tree calibration done! Switch to the Paragon Board in game, then recapture.
+        </p>
+        {captureError && <div className="error-text">{captureError}</div>}
+        <div className="calibration-actions">
+          <button className="btn-primary" onClick={handleRecapture}>
+            重新截图 / Recapture Screenshot
           </button>
           <button className="btn-secondary" onClick={onCancel}>
             取消 / Cancel
@@ -188,6 +226,9 @@ function CalibrationWizard({ onComplete, onCancel }: {
           disabled={currentStep === 0}
         >
           上一步 / Back
+        </button>
+        <button className="btn-secondary" onClick={handleRecapture}>
+          重新截图 / Recapture
         </button>
         <button className="btn-secondary" onClick={onCancel}>
           取消 / Cancel
